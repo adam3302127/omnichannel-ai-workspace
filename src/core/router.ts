@@ -92,6 +92,12 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
       "\n\nCRITICAL: The user wants a quote/order. BUILD IT NOW with dollar amounts. Do NOT ask 'what are you looking for', 'are you ordering products', or any clarifying questions. Use the sheet: pick strains, apply tiers, add shipping. Budget (e.g. $5k) → split across categories. 'Mix of all 3' → Bulk Flower + THCP + PreRolls. Only ask for details if they want to proceed. dep = value exotics/light dep.";
   }
 
+  const isMediaRequest = /video|media|watch|link for|send me the (video|media)/i.test(lower);
+  if (isMediaRequest) {
+    systemPrompt +=
+      "\n\nCRITICAL: You HAVE access to product video links in the inventory. When the user asks for a video/media link, you MUST send it. Do NOT say you don't have access. The REFERENCE_CONTENT will include the Media column with URLs.";
+  }
+
   // Quote takes precedence: "build me $5k order" = quote, not menu
   if (
     !isQuoteRequest &&
@@ -119,7 +125,6 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   }
 
   let userText = input.text;
-  const isMediaRequest = /video|media|watch|link for|show me the (video|media)/i.test(lower);
 
   // Quote/order requests OR video/media requests: inject live sheet (includes Media column URLs)
   if (isQuoteRequest || contentKey === "pricing" || isMediaRequest) {
