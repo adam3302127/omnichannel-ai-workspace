@@ -10,6 +10,33 @@ function norm(s: string): string {
   return s.replace(/\u00A0/g, " ").replace(/\s+/g, " ").trim();
 }
 
+/** Extract real URL from Google redirect (url?q=...) or return as-is. */
+function resolveUrl(href: string): string {
+  try {
+    const u = new URL(href);
+    const q = u.searchParams.get("q");
+    if (q) return q;
+  } catch {
+    /* ignore */
+  }
+  return href;
+}
+
+/** Get cell text; if it has a link, append the URL so Claude can send it. */
+function cellToText($: cheerio.CheerioAPI, td: cheerio.Element): string {
+  const $td = $(td);
+  const text = norm($td.text());
+  const $a = $td.find("a[href]").first();
+  if ($a.length) {
+    const href = $a.attr("href") ?? "";
+    const resolved = resolveUrl(href);
+    if (resolved && resolved.startsWith("http")) {
+      return text ? `${text}: ${resolved}` : resolved;
+    }
+  }
+  return text;
+}
+
 /** Only skip empty rows. Keep pricing tiers ($X/lb), shipping, and all product data. */
 function isSkipRow(firstCell: string): boolean {
   return !firstCell || firstCell.trim() === "";
@@ -40,7 +67,7 @@ async function fetchCategoryTable(
     const rowCells = $(trEls[i])
       .find("td")
       .toArray()
-      .map((td) => norm($(td).text()));
+      .map((td) => cellToText($, td));
     const lowerCells = rowCells.map((c) => c.toLowerCase());
     if (headerKeywords.some((kw) => lowerCells.some((c) => c.includes(kw)))) {
       headerCells = rowCells;
@@ -60,7 +87,7 @@ async function fetchCategoryTable(
     const rowCells = $(trEls[i])
       .find("td")
       .toArray()
-      .map((td) => norm($(td).text()));
+      .map((td) => cellToText($, td));
     if (!rowCells.length) continue;
 
     const firstCell = rowCells[0] ?? "";
@@ -115,7 +142,8 @@ export async function getFreshBrosQuoteContext(
   }
 
   parts.push("---");
-  parts.push("PRODUCT ALIASES: 'value exotics' / 'value exotic' / 'VEX' / 'deps' / 'light dep' / 'light assist' = VALUE EXOTIC/VEX (Light dep/Light Assist) in Bulk Flower. 'Concentrates' = check Ingredients tab or any tab with concentrates. Use ALL tabs above when building mixed orders (flower + concentrates, etc.).");
+  parts.push("PRODUCT ALIASES: 'value exotics' / 'value exotic' / 'VEX' / 'deps' / 'light dep' / 'light assist' = VALUE EXOTIC/VEX (Light dep/Light Assist) in Bulk Flower. 'Concentrates' = check Ingredients tab. Use ALL tabs when building mixed orders.");
+  parts.push("MEDIA/VIDEO: The Media column contains video links (format: 'Watch Video: https://drive.google.com/...'). When a customer asks for video/media of a strain or product, send the exact URL from the Media column for that product. If it says 'Coming Soon' with no URL, say video is coming soon.");
   parts.push("");
   parts.push("SHIPPING: The sheet has Est. Shipping Costs by order size (e.g. $65/LB for 2-4 LB, $40/lb for 5-10 LB, $30/lb for 11-24 LB, $25/lb for 25+ LB). Use these tiers for shipping estimates.");
   parts.push("");

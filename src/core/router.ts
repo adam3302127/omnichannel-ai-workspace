@@ -119,19 +119,25 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   }
 
   let userText = input.text;
+  const isMediaRequest = /video|media|watch|link for|show me the (video|media)/i.test(lower);
 
-  // Quote/order requests: inject live sheet (pricing + shipping) so Claude can quote
-  if (isQuoteRequest || contentKey === "pricing") {
+  // Quote/order requests OR video/media requests: inject live sheet (includes Media column URLs)
+  if (isQuoteRequest || contentKey === "pricing" || isMediaRequest) {
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
+      const rules = isMediaRequest
+        ? `RULES: The user wants the VIDEO/MEDIA link for a product. Find the product in the REFERENCE above (match by strain/product name). The Media column has URLs like "Watch Video: https://drive.google.com/...". Send that exact URL. If Media says "Coming Soon" with no URL, say video is coming soon. Be brief.`
+        : `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +
         `REFERENCE_KEY: live_inventory_quote\n` +
         `${quoteText}\n` +
         `REFERENCE_CONTENT_END\n\n` +
         `User: ${input.text}\n\n` +
-        `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet (Bulk Flower, Ingredients, Concentrates, Copacked, etc.). Flower + concentrates = use both flower tab AND ingredients/concentrates tab. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
-      console.log("[Router] Injected quote context for pricing/order request");
+        rules;
+      console.log(
+        `[Router] Injected quote context (${isMediaRequest ? "media" : "pricing/order"} request)`
+      );
     } catch (err) {
       console.error("[Router] Quote context failed:", err instanceof Error ? err.message : err);
     }
@@ -279,7 +285,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   // Always append sheet link for quote/inventory/order requests (most important for user)
   let finalText = cleanText;
   const sheetUrl = config.inventory.sheetUrl;
-  const isInventoryRelated = /inventory|stock|quote|order|value exotic|dep|flower|lbs|wholesale|bulk|copacked|preroll|sheet|menu|pricing|price/.test(lower);
+  const isInventoryRelated = /inventory|stock|quote|order|value exotic|dep|flower|lbs|wholesale|bulk|copacked|preroll|sheet|menu|pricing|price|video|media/.test(lower);
   if (sheetUrl && isInventoryRelated && !cleanText.includes(sheetUrl)) {
     finalText = cleanText + "\n\nLive sheet: " + sheetUrl;
   }
