@@ -130,7 +130,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `${quoteText}\n` +
         `REFERENCE_CONTENT_END\n\n` +
         `User: ${input.text}\n\n` +
-        `RULES: BUILD THE ORDER NOW. Do NOT ask what they want, what category, or any questions. Use the sheet: pick strains, apply tiers, add shipping. $5k budget → split across Bulk Flower, THCP, PreRolls. "Mix of all 3" → one third each category. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
+        `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet (Bulk Flower, Ingredients, Concentrates, Copacked, etc.). Flower + concentrates = use both flower tab AND ingredients/concentrates tab. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       console.log("[Router] Injected quote context for pricing/order request");
     } catch (err) {
       console.error("[Router] Quote context failed:", err instanceof Error ? err.message : err);

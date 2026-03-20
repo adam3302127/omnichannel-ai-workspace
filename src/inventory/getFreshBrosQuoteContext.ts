@@ -35,12 +35,14 @@ async function fetchCategoryTable(
   let headerCells: string[] | null = null;
   let headerIndex = -1;
 
+  const headerKeywords = ["strain", "product", "item", "name", "sku"];
   for (let i = 0; i < trEls.length; i++) {
     const rowCells = $(trEls[i])
       .find("td")
       .toArray()
       .map((td) => norm($(td).text()));
-    if (rowCells.some((c) => c.toLowerCase().includes("strain"))) {
+    const lowerCells = rowCells.map((c) => c.toLowerCase());
+    if (headerKeywords.some((kw) => lowerCells.some((c) => c.includes(kw)))) {
       headerCells = rowCells;
       headerIndex = i;
       break;
@@ -95,8 +97,10 @@ export async function getFreshBrosQuoteContext(
   }
   const baseId = baseIdMatch[1];
   const gids = extractPublishedCategoryGids(viewerHtml);
+  const allCategoryNames = gids.map((g) => g.name);
 
-  const toFetch = categories ?? ["Bulk Flower", "Bulk Copacked"];
+  // Default: fetch ALL sheet tabs (Bulk Flower, Ingredients, Concentrates, Copacked, etc.)
+  const toFetch = categories ?? (allCategoryNames.length > 0 ? allCategoryNames : ["Bulk Flower", "Bulk Copacked"]);
   const parts: string[] = [];
 
   parts.push("LIVE INVENTORY & PRICING (use this for quotes):");
@@ -111,7 +115,7 @@ export async function getFreshBrosQuoteContext(
   }
 
   parts.push("---");
-  parts.push("PRODUCT ALIASES: 'value exotics' / 'value exotic' / 'VEX' / 'deps' / 'light dep' / 'light assist' = VALUE EXOTIC/VEX (Light dep/Light Assist) in Bulk Flower. Higher sub-tier (High, Ultra) = more light assist; Entry/Standard = more light dep.");
+  parts.push("PRODUCT ALIASES: 'value exotics' / 'value exotic' / 'VEX' / 'deps' / 'light dep' / 'light assist' = VALUE EXOTIC/VEX (Light dep/Light Assist) in Bulk Flower. 'Concentrates' = check Ingredients tab or any tab with concentrates. Use ALL tabs above when building mixed orders (flower + concentrates, etc.).");
   parts.push("");
   parts.push("SHIPPING: The sheet has Est. Shipping Costs by order size (e.g. $65/LB for 2-4 LB, $40/lb for 5-10 LB, $30/lb for 11-24 LB, $25/lb for 25+ LB). Use these tiers for shipping estimates.");
   parts.push("");
