@@ -23,7 +23,7 @@ function resolveUrl(href: string): string {
 }
 
 /** Get cell text; if it has a link, append the URL so Claude can send it. */
-function cellToText($: cheerio.CheerioAPI, td: cheerio.Element): string {
+function cellToText($: cheerio.CheerioAPI, td: Parameters<cheerio.CheerioAPI>[0]): string {
   const $td = $(td);
   const text = norm($td.text());
   const $a = $td.find("a[href]").first();
