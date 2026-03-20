@@ -82,10 +82,10 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   const detectedInventoryCategory = detectInventoryCategory(lower);
   const isQuoteRequest = /quote|put together|build.*order|pricing on|how much|price for|order|wholesale|bulk order|estimate|ballpark|what would it cost|get a price|cost for|build me.*order|dep order/i.test(lower);
 
-  // Override system prompt for quote requests: must give concrete quote, not ask for details
+  // Override system prompt for quote requests: BUILD the quote, never ask first
   if (isQuoteRequest) {
     systemPrompt +=
-      "\n\nCRITICAL: The user is asking for a quote/order. You MUST give a concrete quote with dollar amounts from the sheet. Do NOT ask for contact info, strain preference, quality tier, budget, or timeline before quoting. Just build the order and quote. dep = value exotics/light dep.";
+      "\n\nCRITICAL: The user wants a quote/order. You MUST build it and give dollar amounts NOW. Do NOT ask for strain, quantity, tier, shipping, or contact info first. Use the sheet to make reasonable assumptions (e.g. budget → split across strains, use Tier 3 for 25+ lbs). Only ask for details later if the client wants to proceed and you need specifics. dep = value exotics/light dep.";
   }
 
   if (
@@ -124,10 +124,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `${quoteText}\n` +
         `REFERENCE_CONTENT_END\n\n` +
         `User: ${input.text}\n\n` +
-        `RULES: You CAN and MUST build the order and give a concrete quote with dollar amounts. Use Tier 1/2/3 from the sheet (Tier 3 = 25+ lbs). ` +
-        `Do NOT say you can't build an order or need a human - you have the data. Do NOT ask for name/email/phone before quoting. ` +
-        `Be CONCISE: brief totals, bullet points. Add shipping from Est. Shipping tiers. ` +
-        `ALWAYS end with: Live sheet: ${sheetUrl}`;
+        `RULES: BUILD THE ORDER NOW. Do NOT ask for strain, quantity, tier, or shipping first. Use the sheet: pick strains, apply tiers (Tier 3 for 25+ lbs), add shipping. If user gave a budget (e.g. $10k), split across available strains. If they said "all strains", include a mix. Only ask for details if they want to proceed and you need something specific. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       console.log("[Router] Injected quote context for pricing/order request");
     } catch (err) {
       console.error("[Router] Quote context failed:", err instanceof Error ? err.message : err);
@@ -137,8 +134,8 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   if (contentKey) {
     try {
       console.log(`[Router] client_content intent matched: ${contentKey}`);
-      if (contentKey === "menu") {
-        // Option 3: menu/table responses are deterministic and do not require Claude.
+      if (contentKey === "menu" && !isQuoteRequest) {
+        // Option 3: menu/table responses are deterministic. Skip if user wants a quote—let Claude build it.
         const categoryToRender = detectedInventoryCategory;
         let assistantText: string;
         if (categoryToRender) {
