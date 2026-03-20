@@ -43,4 +43,8 @@ export const config = {
     nodeEnv: optionalEnv("NODE_ENV", "development"),
   },
   webhookSecret: optionalEnv("WEBHOOK_SECRET", ""),
+  /** Optional: Gemini API key for embeddings (RAG). If omitted, knowledge base uses keyword-style retrieval. */
+  gemini: {
+    apiKey: optionalEnv("GEMINI_API_KEY", ""),
+  },
 } as const;

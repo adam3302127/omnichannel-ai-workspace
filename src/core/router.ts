@@ -78,8 +78,9 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   );
 
   // Inject evolving knowledge base (learnings that improve answers over time)
+  // Uses Gemini semantic RAG when GEMINI_API_KEY is set; otherwise all entries.
   try {
-    const knowledgeText = await getKnowledgeBaseText(tenant.id);
+    const knowledgeText = await getKnowledgeBaseText(tenant.id, input.text);
     if (knowledgeText) {
       systemPrompt += knowledgeText;
       console.log("[Router] Injected knowledge base learnings");
@@ -110,7 +111,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     );
   if (isMediaRequest) {
     systemPrompt +=
-      "\n\nCRITICAL: REFERENCE_CONTENT below contains the live sheet with video URLs in the Media column. You MUST extract and send them. NEVER say 'I don't have access' or 'I don't have video links'—they ARE in the data. 'exotics'/'exotic' = VALUE EXOTIC/VEX in Bulk Flower. Output format: STRAIN NAME: https://... (one per line). Nothing else.";
+      "\n\nCRITICAL: REFERENCE_CONTENT has video URLs in the Media column. MATCH the user's request EXACTLY: if they ask for 'video of smalls', send ONLY the smalls video. If they ask for 'video of [strain X]', send ONLY strain X's video. If they ask for 'exotics' or 'deps', send ONLY VALUE EXOTIC/VEX section videos. Never send the wrong video. Output format: STRAIN NAME: https://... (one per line).";
   }
 
   // Quote takes precedence: "build me $5k order" = quote, not menu
@@ -146,7 +147,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
       const rules = isMediaRequest
-        ? `RULES: The REFERENCE_CONTENT above contains the live sheet with a Media column. EXTRACT every https:// URL you find (drive.google.com, youtube.com, etc) and output them as "STRAIN NAME: URL" one per line. "exotics"/"exotic"/"deps"/"VEX" = VALUE EXOTIC section in Bulk Flower. NEVER say you don't have access—the URLs ARE in the data. Output ONLY the labeled links, nothing else.`
+        ? `RULES: Match the user's request EXACTLY. If they asked for "video of smalls" → send ONLY the smalls row's video. If "video of [strain]" → ONLY that strain's video. If "exotics"/"deps" → ONLY VALUE EXOTIC/VEX section. Find the row(s) that match what they asked for and send ONLY those video URLs. Format: STRAIN NAME: https://... Never send a video for a different product than requested.`
         : `RULES: BUILD THE ORDER NOW. You HAVE the live inventory above. NEVER say you don't have access. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +

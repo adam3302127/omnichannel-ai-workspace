@@ -46,9 +46,26 @@ Edit `.env` and set:
 
 ### 3. Supabase
 
+**Option A: Supabase CLI (recommended for local dev)**
+
+Requires Docker. Migrations live in `supabase/migrations/`; seeds in `supabase/seed.sql`.
+
+```bash
+# Start local Supabase (Studio at http://127.0.0.1:54323, DB on 54322)
+npm run db:start
+
+# Get local env vars for .env
+npx supabase status -o env
+```
+
+Copy the `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (or `SERVICE_ROLE_KEY`) into `.env` as `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`.
+
+**Option B: Hosted Supabase**
+
 1. Create a project at [supabase.com](https://supabase.com).
-2. In the Supabase dashboard, open the **SQL Editor**.
-3. Copy the contents of `src/db/schema.sql` and run it. This creates `tenants`, `users`, `conversations`, `messages`, and a seed tenant (`slug: default`).
+2. Link locally: `npx supabase link --project-ref YOUR_PROJECT_REF`
+3. Push migrations: `npm run db:push`
+4. Or manually: Run `src/db/schema.sql` and `src/db/migrations/*.sql` in the SQL Editor.
 
 ### 4. Telegram bot
 
@@ -118,6 +135,20 @@ src/
 - `npm start` — Run compiled `dist/index.js`
 - `npm run lint` — ESLint
 - `npm run format` — Prettier
+
+**Supabase CLI:**
+
+- `npm run db:start` — Start local Supabase (Docker)
+- `npm run db:stop` — Stop local Supabase
+- `npm run db:status` — Show local URLs and keys
+- `npm run db:reset` — Reset DB, re-run migrations and seeds
+- `npm run db:push` — Push migrations to linked remote project
+- `npm run db:pull` — Pull remote schema as migration
+- `npm run db:diff` — Diff schema, save as new migration
+- `npm run migration:new <name>` — Create new migration file
+- `npm run types:gen` — Generate TypeScript types from local DB
+- `npm run sync-obsidian` — Sync Obsidian vault to knowledge base & client content (see [docs/OBSIDIAN-INTEGRATION.md](docs/OBSIDIAN-INTEGRATION.md))
+- `npm run backfill-embeddings` — Backfill Gemini embeddings for knowledge base
 
 ## License
 
