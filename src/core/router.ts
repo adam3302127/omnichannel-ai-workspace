@@ -126,7 +126,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
       const rules = isMediaRequest
-        ? `RULES: The user wants the VIDEO/MEDIA link for a product. Find the product in the REFERENCE above (match by strain/product name). The Media column has URLs like "Watch Video: https://drive.google.com/...". Send that exact URL. If Media says "Coming Soon" with no URL, say video is coming soon. Be brief.`
+        ? `RULES: The user wants VIDEO/MEDIA links. Find each product in the REFERENCE above (match by strain name). The Media column has URLs like "Watch Video: https://drive.google.com/...". If they say "these three" or "all three", use the PREVIOUS message to identify which strains (e.g. PAPAYA SUNDAY, SOUR COOKIES, BLACK GRAPE) and send the Media URL for each. List each strain with its link. If Media says "Coming Soon" with no URL, say video coming soon for that one. Be brief.`
         : `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +
@@ -146,8 +146,8 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   if (contentKey) {
     try {
       console.log(`[Router] client_content intent matched: ${contentKey}`);
-      if (contentKey === "menu" && !isQuoteRequest) {
-        // Option 3: menu/table responses are deterministic. Skip if user wants a quote—let Claude build it.
+      if (contentKey === "menu" && !isQuoteRequest && !isMediaRequest) {
+        // Skip menu if user wants a quote or media links—let Claude handle those.
         const categoryToRender = detectedInventoryCategory;
         let assistantText: string;
         if (categoryToRender) {
