@@ -88,10 +88,14 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
       "\n\nCRITICAL: The user is asking for a quote/order. You MUST give a concrete quote with dollar amounts from the sheet. Do NOT ask for contact info, strain preference, quality tier, budget, or timeline before quoting. Just build the order and quote. dep = value exotics/light dep.";
   }
 
-  if (/(menu|services?|offer|offers|offerings|product(s)?|catalog|what do you offer|what can you offer)/.test(lower)) {
+  if (
+    /(menu|services?|offer|offers|offerings|product(s)?|catalog|what do you offer|what can you offer|what do you have|what do we have|whats? available|what is available|strains?|strain list|what('s| is) in stock|what can I (get|order)|do you have|what kind of|what have you got|what('s| is) on the (menu|sheet)|live (menu|inventory|sheet)|current (menu|inventory)|available)/.test(
+      lower
+    )
+  ) {
     contentKey = "menu";
   } else if (
-    /hours?|open|availability|available/.test(lower)
+    /hours?|open|availability|when.*available/.test(lower)
   ) {
     contentKey = "hours";
   } else if (
@@ -122,8 +126,8 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `User: ${input.text}\n\n` +
         `RULES: You CAN and MUST build the order and give a concrete quote with dollar amounts. Use Tier 1/2/3 from the sheet (Tier 3 = 25+ lbs). ` +
         `Do NOT say you can't build an order or need a human - you have the data. Do NOT ask for name/email/phone before quoting. ` +
-        `Just quote. If the user gave quantity/category in this chat, use it. Add shipping from Est. Shipping tiers. ` +
-        `ALWAYS end your response with: Live sheet: ${sheetUrl}`;
+        `Be CONCISE: brief totals, bullet points. Add shipping from Est. Shipping tiers. ` +
+        `ALWAYS end with: Live sheet: ${sheetUrl}`;
       console.log("[Router] Injected quote context for pricing/order request");
     } catch (err) {
       console.error("[Router] Quote context failed:", err instanceof Error ? err.message : err);
@@ -141,7 +145,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
           try {
             assistantText = (
               await getFreshBrosExactCategoryTableText(categoryToRender, {
-                limitRows: 12,
+                limitRows: 8,
               })
             ).text;
           } catch (err) {
@@ -151,16 +155,16 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
             );
             assistantText = (
               await getInventoryCategoriesOverviewText(tenant.id, {
-                maxCategories: 4,
-                maxExampleNamesPerCategory: 3,
+                maxCategories: 5,
+                maxExampleNamesPerCategory: 2,
               })
             ).text;
           }
         } else {
           assistantText = (
             await getInventoryCategoriesOverviewText(tenant.id, {
-              maxCategories: 4,
-              maxExampleNamesPerCategory: 3,
+              maxCategories: 5,
+              maxExampleNamesPerCategory: 2,
             })
           ).text;
         }
@@ -209,6 +213,36 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `[Router] Failed to load client_content for key=${contentKey}:`,
         err instanceof Error ? err.message : err
       );
+    }
+  }
+
+  // Fallback: if message is about products/inventory but didn't get menu/quote context, inject overview
+  const isProductRelated =
+    /(product|inventory|stock|strain|flower|wholesale|bulk|preroll|copacked|value exotic|dep|what do you have|what('s| is) available|do you have|offer|menu|price|order)/.test(
+      lower
+    );
+  if (
+    isProductRelated &&
+    !userText.includes("REFERENCE_CONTENT_START") &&
+    !contentKey
+  ) {
+    try {
+      const overview = (
+        await getInventoryCategoriesOverviewText(tenant.id, {
+          maxCategories: 6,
+          maxExampleNamesPerCategory: 4,
+        })
+      ).text;
+      userText =
+        `REFERENCE_CONTENT_START\n` +
+        `REFERENCE_KEY: inventory_overview\n` +
+        `${overview}\n` +
+        `REFERENCE_CONTENT_END\n\n` +
+        `User: ${input.text}\n\n` +
+        `RULES: You HAVE access to the live inventory above. Use it to answer. Be CONCISE: 2-4 sentences, bullet points for lists. Do NOT say you don't have the menu. Share relevant categories briefly and include the live sheet link.`;
+      console.log("[Router] Injected inventory overview for product-related fallback");
+    } catch (err) {
+      console.error("[Router] Fallback overview failed:", err instanceof Error ? err.message : err);
     }
   }
 
@@ -264,6 +298,6 @@ function detectInventoryCategory(lower: string): string | null {
     return "Bulk PreRolls";
   }
   if (/(bulk\s+copacked|copacked|copack)/.test(lower)) return "Bulk Copacked";
-  if (/(bulk\s+flower|thc\s+flower|bulk\s+flower|flower)/.test(lower)) return "Bulk Flower";
+  if (/(bulk\s+flower|thc\s+flower|flower|exotic|value exotic|vex|dep)/.test(lower)) return "Bulk Flower";
   return null;
 }
