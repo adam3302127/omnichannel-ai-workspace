@@ -126,7 +126,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
       const rules = isMediaRequest
-        ? `RULES: The user wants VIDEO/MEDIA links. Find each product in the REFERENCE above (match by strain name). The Media column has URLs like "Watch Video: https://drive.google.com/...". If they say "these three" or "all three", use the PREVIOUS message to identify which strains (e.g. PAPAYA SUNDAY, SOUR COOKIES, BLACK GRAPE) and send the Media URL for each. List each strain with its link. If Media says "Coming Soon" with no URL, say video coming soon for that one. Be brief.`
+        ? `RULES: Send ONLY the video links. Find each strain in the REFERENCE (Media column has "Watch Video: https://..."). If "these three"/"all three", use the previous message for strain names. Output: one link per line, nothing else. Skip strains with no URL (Coming Soon).`
         : `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +

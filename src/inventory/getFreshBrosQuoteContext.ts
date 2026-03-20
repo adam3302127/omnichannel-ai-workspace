@@ -143,7 +143,7 @@ export async function getFreshBrosQuoteContext(
 
   parts.push("---");
   parts.push("PRODUCT ALIASES: 'value exotics' / 'value exotic' / 'VEX' / 'deps' / 'light dep' / 'light assist' = VALUE EXOTIC/VEX (Light dep/Light Assist) in Bulk Flower. 'Concentrates' = check Ingredients tab. Use ALL tabs when building mixed orders.");
-  parts.push("MEDIA/VIDEO: The Media column contains video links (format: 'Watch Video: https://drive.google.com/...'). When a customer asks for video/media of a strain or product, send the exact URL from the Media column for that product. If it says 'Coming Soon' with no URL, say video is coming soon.");
+  parts.push("MEDIA/VIDEO: Media column = 'Watch Video: https://drive.google.com/...'. When asked for video/media, send ONLY those URLs. One per line.");
   parts.push("");
   parts.push("SHIPPING: The sheet has Est. Shipping Costs by order size (e.g. $65/LB for 2-4 LB, $40/lb for 5-10 LB, $30/lb for 11-24 LB, $25/lb for 25+ LB). Use these tiers for shipping estimates.");
   parts.push("");
