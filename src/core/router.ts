@@ -80,15 +80,21 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   const lower = input.text.toLowerCase();
   let contentKey: string | null = null;
   const detectedInventoryCategory = detectInventoryCategory(lower);
-  const isQuoteRequest = /quote|put together|build.*order|pricing on|how much|price for|order|wholesale|bulk order|estimate|ballpark|what would it cost|get a price|cost for|build me.*order|dep order/i.test(lower);
+  const isQuoteRequest =
+    /quote|put together|build.*order|pricing on|how much|price for|order|wholesale|bulk order|estimate|ballpark|what would it cost|get a price|cost for|build me|dep order/i.test(
+      lower
+    ) ||
+    /\$[\d.,]+k?|\d+\s*(lbs?|lb)|mix|add up to|split|evenly/i.test(lower);
 
   // Override system prompt for quote requests: BUILD the quote, never ask first
   if (isQuoteRequest) {
     systemPrompt +=
-      "\n\nCRITICAL: The user wants a quote/order. You MUST build it and give dollar amounts NOW. Do NOT ask for strain, quantity, tier, shipping, or contact info first. Use the sheet to make reasonable assumptions (e.g. budget → split across strains, use Tier 3 for 25+ lbs). Only ask for details later if the client wants to proceed and you need specifics. dep = value exotics/light dep.";
+      "\n\nCRITICAL: The user wants a quote/order. BUILD IT NOW with dollar amounts. Do NOT ask 'what are you looking for', 'are you ordering products', or any clarifying questions. Use the sheet: pick strains, apply tiers, add shipping. Budget (e.g. $5k) → split across categories. 'Mix of all 3' → Bulk Flower + THCP + PreRolls. Only ask for details if they want to proceed. dep = value exotics/light dep.";
   }
 
+  // Quote takes precedence: "build me $5k order" = quote, not menu
   if (
+    !isQuoteRequest &&
     /(menu|services?|offer|offers|offerings|product(s)?|catalog|what do you offer|what can you offer|what do you have|what do we have|whats? available|what is available|strains?|strain list|what('s| is) in stock|what can I (get|order)|do you have|what kind of|what have you got|what('s| is) on the (menu|sheet)|live (menu|inventory|sheet)|current (menu|inventory)|available)/.test(
       lower
     )
@@ -124,7 +130,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `${quoteText}\n` +
         `REFERENCE_CONTENT_END\n\n` +
         `User: ${input.text}\n\n` +
-        `RULES: BUILD THE ORDER NOW. Do NOT ask for strain, quantity, tier, or shipping first. Use the sheet: pick strains, apply tiers (Tier 3 for 25+ lbs), add shipping. If user gave a budget (e.g. $10k), split across available strains. If they said "all strains", include a mix. Only ask for details if they want to proceed and you need something specific. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
+        `RULES: BUILD THE ORDER NOW. Do NOT ask what they want, what category, or any questions. Use the sheet: pick strains, apply tiers, add shipping. $5k budget → split across Bulk Flower, THCP, PreRolls. "Mix of all 3" → one third each category. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       console.log("[Router] Injected quote context for pricing/order request");
     } catch (err) {
       console.error("[Router] Quote context failed:", err instanceof Error ? err.message : err);
