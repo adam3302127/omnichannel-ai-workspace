@@ -95,7 +95,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
   const isMediaRequest = /video|media|watch|link for|send me the (video|media)/i.test(lower);
   if (isMediaRequest) {
     systemPrompt +=
-      "\n\nCRITICAL: You HAVE the video links. Send them. Do NOT ask which category or for clarification. deps = VALUE EXOTIC/VEX in Bulk Flower. Output ONLY the URLs, one per line.";
+      "\n\nCRITICAL: You HAVE the video links. Send them labeled: STRAIN NAME: URL. Do NOT discuss lead capture, appointments, or other actions. Just the labeled video links.";
   }
 
   // Quote takes precedence: "build me $5k order" = quote, not menu
@@ -131,7 +131,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
       const rules = isMediaRequest
-        ? `RULES: Send ONLY the video links. NO questions. "deps"/"available deps" = VALUE EXOTIC/VEX rows in Bulk Flower—find ALL of them, send every Media URL. Media column format: "Watch Video: https://drive.google.com/...". Output: one link per line. Skip "Coming Soon" (no URL). Do NOT ask which category.`
+        ? `RULES: Send video links ONLY. Label each: "STRAIN NAME: https://..." one per line. "deps" = VALUE EXOTIC/VEX in Bulk Flower. Skip "Coming Soon". No questions, no other actions.`
         : `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +
