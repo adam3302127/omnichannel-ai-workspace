@@ -81,6 +81,20 @@ CREATE TABLE inventory_items (
 CREATE INDEX idx_inventory_items_tenant_category ON inventory_items(tenant_id, category);
 CREATE INDEX idx_inventory_items_tenant_updated_at ON inventory_items(tenant_id, updated_at);
 
+-- Evolving knowledge base: learnings that improve the bot over time
+-- Admins add entries; optionally auto-add from "remember this:" in conversations
+CREATE TABLE knowledge_base (
+  id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id   uuid NOT NULL REFERENCES tenants(id) ON DELETE CASCADE,
+  topic       text NOT NULL,   -- e.g. 'deps', 'shipping', 'min order'
+  content     text NOT NULL,  -- the fact/learning
+  source      text DEFAULT 'admin' CHECK (source IN ('admin', 'user', 'conversation')),
+  created_at  timestamptz DEFAULT now(),
+  updated_at  timestamptz DEFAULT now()
+);
+
+CREATE INDEX idx_knowledge_base_tenant_id ON knowledge_base(tenant_id);
+
 -- Seed tenant with default system prompt (example)
 -- System prompt template uses {{channel}} and {{is_group}} at runtime.
 INSERT INTO tenants (name, slug, system_prompt, allowed_channels, allowed_actions)

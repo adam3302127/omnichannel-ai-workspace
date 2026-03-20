@@ -17,8 +17,31 @@ import {
   InventorySyncError,
 } from "./inventory/syncFreshBrosInventory";
 import { getInventoryMenuSummary } from "./inventory/getInventoryMenuSummary";
+import {
+  ADMIN_STYLES,
+  adminNav,
+  tenantSelector,
+  ADMIN_FETCH_SCRIPT,
+} from "./admin/layout";
 
 const app = new Hono();
+
+function escapeHtml(s: string): string {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+function escapeJs(s: string): string {
+  return String(s)
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r");
+}
 
 // Admin Supabase client (service role)
 const adminSupabase = createClient(config.supabase.url, config.supabase.serviceKey);
@@ -378,6 +401,90 @@ app.put("/admin/api/tenants/:tenantId/content/:key", async (c) => {
   return c.json({ ok: true });
 });
 
+// --- Knowledge base (evolving learnings) ---
+app.get("/admin/api/tenants/:tenantId/knowledge", async (c) => {
+  if (!isAdminRequest(c)) return c.json({ error: "unauthorized" }, 401);
+  const tenantId = c.req.param("tenantId");
+  const { data, error } = await adminSupabase
+    .from("knowledge_base")
+    .select("id,topic,content,source,created_at,updated_at")
+    .eq("tenant_id", tenantId)
+    .order("updated_at", { ascending: false });
+  if (error) return c.json({ error: error.message }, 500);
+  const items =
+    data?.map((r) => ({
+      id: r.id,
+      topic: r.topic,
+      content: r.content,
+      source: r.source,
+      createdAt: r.created_at,
+      updatedAt: r.updated_at,
+    })) ?? [];
+  return c.json({ items });
+});
+
+app.post("/admin/api/tenants/:tenantId/knowledge", async (c) => {
+  if (!isAdminRequest(c)) return c.json({ error: "unauthorized" }, 401);
+  const tenantId = c.req.param("tenantId");
+  type Body = { topic: string; content: string; source?: string };
+  const body = (await c.req.json()) as Body;
+  if (!body.topic?.trim() || !body.content?.trim()) {
+    return c.json({ error: "topic and content required" }, 400);
+  }
+  const { data, error } = await adminSupabase
+    .from("knowledge_base")
+    .insert({
+      tenant_id: tenantId,
+      topic: body.topic.trim(),
+      content: body.content.trim(),
+      source: body.source ?? "admin",
+    })
+    .select("id,topic,content,source,created_at,updated_at")
+    .single();
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json({
+    id: data.id,
+    topic: data.topic,
+    content: data.content,
+    source: data.source,
+    createdAt: data.created_at,
+    updatedAt: data.updated_at,
+  });
+});
+
+app.put("/admin/api/tenants/:tenantId/knowledge/:id", async (c) => {
+  if (!isAdminRequest(c)) return c.json({ error: "unauthorized" }, 401);
+  const tenantId = c.req.param("tenantId");
+  const id = c.req.param("id");
+  type Body = { topic?: string; content?: string };
+  const body = (await c.req.json()) as Body;
+  const update: Record<string, unknown> = { updated_at: new Date().toISOString() };
+  if (body.topic !== undefined) update.topic = body.topic.trim();
+  if (body.content !== undefined) update.content = body.content.trim();
+  const { data, error } = await adminSupabase
+    .from("knowledge_base")
+    .update(update)
+    .eq("id", id)
+    .eq("tenant_id", tenantId)
+    .select("id")
+    .single();
+  if (error || !data) return c.json({ error: error?.message ?? "not found" }, 404);
+  return c.json({ ok: true });
+});
+
+app.delete("/admin/api/tenants/:tenantId/knowledge/:id", async (c) => {
+  if (!isAdminRequest(c)) return c.json({ error: "unauthorized" }, 401);
+  const tenantId = c.req.param("tenantId");
+  const id = c.req.param("id");
+  const { error } = await adminSupabase
+    .from("knowledge_base")
+    .delete()
+    .eq("id", id)
+    .eq("tenant_id", tenantId);
+  if (error) return c.json({ error: error.message }, 500);
+  return c.json({ ok: true });
+});
+
 // Preview inventory parsing (no DB writes)
 app.get("/admin/api/sync/inventory/preview", async (c) => {
   if (!isAdminRequest(c)) return c.json({ error: "unauthorized" }, 401);
@@ -556,37 +663,38 @@ app.get("/admin/chats", async (c) => {
     return c.html("<h1>Unauthorized</h1><p>Missing or invalid admin token.</p>", 401);
   }
   const tenantSlug = (c.req.query("tenantSlug") as string) || "default";
+  const { data: tenants } = await adminSupabase
+    .from("tenants")
+    .select("id,name,slug")
+    .order("created_at", { ascending: true });
+  const tenantList = tenants ?? [];
+  const tenantSel = tenantSelector(
+    tenantList.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
+    tenantSlug,
+    "/admin/chats"
+  );
   return c.html(`<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Chats – Omnichannel Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: #020617; color: #e5e7eb; }
-      header { padding: 12px 16px; border-bottom: 1px solid #1f2937; display: flex; align-items: center; gap: 12px; }
-      a { color: #60a5fa; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      main { padding: 16px; }
-      table { width: 100%; border-collapse: collapse; font-size: 13px; }
-      th, td { padding: 8px 10px; border-bottom: 1px solid #1f2937; text-align: left; }
-      th { color: #9ca3af; font-weight: 500; }
+    <style>${ADMIN_STYLES}
       .conv-row { cursor: pointer; }
-      .conv-row:hover { background: #0f172a; }
-      .msg-preview { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #9ca3af; font-size: 12px; }
-      .detail { margin-top: 16px; padding: 12px; background: #0f172a; border-radius: 8px; display: none; }
+      .msg-preview { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #94a3b8; font-size: 12px; }
+      .detail { margin-top: 16px; padding: 16px; background: #1e293b; border-radius: 8px; display: none; }
       .detail.visible { display: block; }
-      .msg { margin: 6px 0; padding: 6px 8px; border-radius: 6px; font-size: 13px; }
+      .msg { margin: 8px 0; padding: 8px 12px; border-radius: 6px; font-size: 13px; }
       .msg.user { background: #1e3a5f; margin-left: 0; margin-right: 24px; }
-      .msg.assistant { background: #1e293b; margin-left: 24px; margin-right: 0; }
-      .meta { font-size: 11px; color: #6b7280; }
+      .msg.assistant { background: #334155; margin-left: 24px; margin-right: 0; }
     </style>
+    <script>${ADMIN_FETCH_SCRIPT}</script>
   </head>
   <body>
     <header>
-      <a href="/admin">← Admin</a>
-      <h1 style="font-size: 16px; margin: 0;">Chats & History</h1>
-      <span style="font-size: 12px; color: #9ca3af;">Tenant: ${tenantSlug}</span>
+      <h1>Chats & History</h1>
+      ${adminNav("chats")}
+      <span style="margin-left:auto;">${tenantSel}</span>
     </header>
     <main>
       <div id="loading">Loading conversations…</div>
@@ -603,7 +711,8 @@ app.get("/admin/chats", async (c) => {
     </main>
     <script>
       const tenantSlug = "${tenantSlug}";
-      fetch("/admin/api/conversations?tenantSlug=" + encodeURIComponent(tenantSlug))
+      const fetchFn = window.adminFetch || fetch;
+      fetchFn("/admin/api/conversations?tenantSlug=" + encodeURIComponent(tenantSlug))
         .then(r => r.text().then(t => { try { return { ok: r.ok, data: JSON.parse(t) }; } catch { return { ok: r.ok, data: { error: t.slice(0,200) } }; }))
         .then(({ ok, data }) => {
           document.getElementById("loading").style.display = "none";
@@ -628,7 +737,7 @@ app.get("/admin/chats", async (c) => {
       function loadMessages(convId, threadId) {
         document.getElementById("detail").classList.add("visible");
         document.getElementById("detail-id").textContent = threadId;
-        fetch("/admin/api/conversations/" + convId + "/messages")
+        fetchFn("/admin/api/conversations/" + convId + "/messages")
           .then(r => r.json())
           .then(data => {
             const div = document.getElementById("messages");
@@ -646,7 +755,9 @@ app.get("/admin/chats", async (c) => {
 </html>`);
 });
 
-// Minimal HTML admin page
+// --- Admin HTML pages ---
+
+// Main dashboard
 app.get("/admin", async (c) => {
   if (!isAdminRequest(c)) {
     return c.html("<h1>Unauthorized</h1><p>Missing or invalid admin token.</p>", 401);
@@ -658,50 +769,328 @@ app.get("/admin", async (c) => {
   if (error) {
     return c.html(`<h1>Admin</h1><p>Error: ${error.message}</p>`, 500);
   }
-  const rows =
-    data
-      ?.map(
-        (t) =>
-          `<tr><td>${t.name}</td><td>${t.slug}</td><td>${t.plan}</td><td>${
-            (t.allowed_channels ?? []).join(", ")
-          }</td><td>${(t.allowed_actions ?? []).join(", ")}</td></tr>`
-      )
-      .join("") ?? "";
+  const tenants = data ?? [];
+  const rows = tenants
+    .map(
+      (t) =>
+        `<tr><td>${t.name}</td><td>${t.slug}</td><td>${t.plan}</td><td>${
+          (t.allowed_channels ?? []).join(", ")
+        }</td><td>${(t.allowed_actions ?? []).join(", ")}</td></tr>`
+    )
+    .join("");
   return c.html(`<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Omnichannel Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; margin: 0; background: #020617; color: #e5e7eb; }
-      header { padding: 12px 16px; border-bottom: 1px solid #1f2937; }
-      main { padding: 16px; }
-      table { width: 100%; border-collapse: collapse; font-size: 14px; }
-      th, td { padding: 6px 8px; border-bottom: 1px solid #1f2937; text-align: left; }
-      a { color: #60a5fa; }
-      code { background: #111827; padding: 2px 4px; border-radius: 4px; }
-    </style>
+    <style>${ADMIN_STYLES}</style>
+    <script>${ADMIN_FETCH_SCRIPT}</script>
   </head>
   <body>
     <header>
-      <h1 style="font-size: 16px; margin: 0;">Omnichannel Admin</h1>
-      <p style="font-size: 12px; color: #9ca3af; margin: 4px 0 0;">Internal view of tenants and client content</p>
+      <h1>Omnichannel Admin</h1>
+      ${adminNav("dashboard")}
     </header>
     <main>
-      <p><a href="/admin/chats">View all chats & history →</a></p>
-      <h2 style="margin-top:0;">Tenants</h2>
-      <table>
-        <thead><tr><th>Name</th><th>Slug</th><th>Plan</th><th>Channels</th><th>Actions</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <h2>APIs</h2>
-      <p style="font-size: 13px;">
-        JSON admin APIs are available under <code>/admin/api</code>.<br/>
-        Example: <code>GET /admin/api/tenants</code>, <code>GET /admin/api/tenants/:id</code>,<br/>
-        <code>GET /admin/api/tenants/:tenantId/content</code>, <code>PUT /admin/api/tenants/:tenantId/content/:key</code>.
-      </p>
+      <div class="card">
+        <h2>Quick links</h2>
+        <p>
+          <a href="/admin/chats">Chats & history</a> ·
+          <a href="/admin/knowledge">Knowledge base</a> ·
+          <a href="/admin/content">Client content</a>
+        </p>
+      </div>
+      <div class="card">
+        <h2>Tenants</h2>
+        <table>
+          <thead><tr><th>Name</th><th>Slug</th><th>Plan</th><th>Channels</th><th>Actions</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>APIs</h2>
+        <p class="muted">JSON APIs under <code>/admin/api</code>. Use <code>x-admin-token</code> header in production.</p>
+      </div>
     </main>
+  </body>
+</html>`);
+});
+
+// Knowledge base management
+app.get("/admin/knowledge", async (c) => {
+  if (!isAdminRequest(c)) {
+    return c.html("<h1>Unauthorized</h1><p>Missing or invalid admin token.</p>", 401);
+  }
+  const tenantSlug = (c.req.query("tenantSlug") as string) || "default";
+  const { data: tenants } = await adminSupabase
+    .from("tenants")
+    .select("id,name,slug")
+    .order("created_at", { ascending: true });
+  const tenantList = tenants ?? [];
+  const tenant = tenantList.find((t) => t.slug === tenantSlug) ?? tenantList[0];
+  if (!tenant) {
+    return c.html(`<h1>Admin</h1><p>No tenants found.</p>`, 500);
+  }
+  const { data: items } = await adminSupabase
+    .from("knowledge_base")
+    .select("id,topic,content,source,created_at,updated_at")
+    .eq("tenant_id", tenant.id)
+    .order("updated_at", { ascending: false });
+  const learnings = items ?? [];
+  const learningsJson = JSON.stringify(learnings.map((k) => ({ id: k.id, topic: k.topic, content: k.content }))).replace(
+    /<\/script>/gi,
+    "<\\/script>"
+  );
+  const rows = learnings
+    .map(
+      (k) =>
+        `<tr data-id="${k.id}">
+          <td><strong>${escapeHtml(k.topic)}</strong></td>
+          <td>${escapeHtml(k.content.slice(0, 80))}${k.content.length > 80 ? "…" : ""}</td>
+          <td><span class="badge">${k.source}</span></td>
+          <td class="muted">${new Date(k.updated_at).toLocaleDateString()}</td>
+          <td>
+            <button class="btn btn-ghost btn-sm" onclick="editLearning('${k.id}')">Edit</button>
+            <button class="btn btn-ghost btn-sm" onclick="deleteLearning('${k.id}')">Delete</button>
+          </td>
+        </tr>`
+    )
+    .join("");
+  const tenantSel = tenantSelector(
+    tenantList.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
+    tenantSlug,
+    "/admin/knowledge"
+  );
+  return c.html(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Knowledge Base – Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>${ADMIN_STYLES}</style>
+    <script>${ADMIN_FETCH_SCRIPT}</script>
+  </head>
+  <body>
+    <header>
+      <h1>Knowledge Base</h1>
+      ${adminNav("knowledge")}
+      <span style="margin-left:auto;">${tenantSel}</span>
+    </header>
+    <main>
+      <div class="card">
+        <h2>Add learning</h2>
+        <form id="addForm" onsubmit="return addLearning(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Topic</label>
+              <input type="text" id="newTopic" placeholder="e.g. deps, shipping, min order" required />
+            </div>
+            <div class="form-group" style="flex:2;">
+              <label>Content</label>
+              <input type="text" id="newContent" placeholder="The fact or learning..." required />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+      </div>
+      <div class="card">
+        <h2>Learnings (${learnings.length})</h2>
+        ${learnings.length === 0 ? '<div class="empty-state">No learnings yet. Add one above or have users say "remember this: …" in chat.</div>' : `
+        <table>
+          <thead><tr><th>Topic</th><th>Content</th><th>Source</th><th>Updated</th><th></th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`}
+      </div>
+      <div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:100; align-items:center; justify-content:center;">
+        <div class="card" style="margin:20px; max-width:500px;">
+          <h2>Edit learning</h2>
+          <form id="editForm" onsubmit="return saveEdit(event)">
+            <input type="hidden" id="editId" />
+            <div class="form-group">
+              <label>Topic</label>
+              <input type="text" id="editTopic" required />
+            </div>
+            <div class="form-group">
+              <label>Content</label>
+              <textarea id="editContent" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="button" class="btn btn-ghost" onclick="document.getElementById('editModal').style.display='none'">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </main>
+    <script>
+      const tenantId = "${tenant.id}";
+      const base = "/admin/api/tenants/" + tenantId + "/knowledge";
+      const fetchFn = window.adminFetch || fetch;
+      const learningsData = ${learningsJson};
+      function addLearning(e) {
+        e.preventDefault();
+        const topic = document.getElementById("newTopic").value.trim();
+        const content = document.getElementById("newContent").value.trim();
+        if (!topic || !content) return false;
+        fetchFn(base, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, content }) })
+          .then(r => r.json())
+          .then(d => { if (d.error) alert(d.error); else location.reload(); });
+        return false;
+      }
+      function editLearning(id) {
+        const k = learningsData.find(x => x.id === id);
+        if (!k) return;
+        document.getElementById("editId").value = k.id;
+        document.getElementById("editTopic").value = k.topic;
+        document.getElementById("editContent").value = k.content;
+        document.getElementById("editModal").style.display = "flex";
+      }
+      function saveEdit(e) {
+        e.preventDefault();
+        const id = document.getElementById("editId").value;
+        const topic = document.getElementById("editTopic").value.trim();
+        const content = document.getElementById("editContent").value.trim();
+        fetchFn(base + "/" + id, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ topic, content }) })
+          .then(r => r.json())
+          .then(d => { if (d.error) alert(d.error); else location.reload(); });
+        return false;
+      }
+      function deleteLearning(id) {
+        if (!confirm("Delete this learning?")) return;
+        fetchFn(base + "/" + id, { method: "DELETE" })
+          .then(r => r.json())
+          .then(d => { if (d.error) alert(d.error); else location.reload(); });
+      }
+    </script>
+  </body>
+</html>`);
+});
+
+// Client content management
+app.get("/admin/content", async (c) => {
+  if (!isAdminRequest(c)) {
+    return c.html("<h1>Unauthorized</h1><p>Missing or invalid admin token.</p>", 401);
+  }
+  const tenantSlug = (c.req.query("tenantSlug") as string) || "default";
+  const { data: tenants } = await adminSupabase
+    .from("tenants")
+    .select("id,name,slug")
+    .order("created_at", { ascending: true });
+  const tenantList = tenants ?? [];
+  const tenant = tenantList.find((t) => t.slug === tenantSlug) ?? tenantList[0];
+  if (!tenant) {
+    return c.html(`<h1>Admin</h1><p>No tenants found.</p>`, 500);
+  }
+  const { data: items } = await adminSupabase
+    .from("client_content")
+    .select("id,key,title,content,updated_at")
+    .eq("tenant_id", tenant.id)
+    .order("key", { ascending: true });
+  const contentList = items ?? [];
+  const tenantSel = tenantSelector(
+    tenantList.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
+    tenantSlug,
+    "/admin/content"
+  );
+  const rows = contentList
+    .map(
+      (r) =>
+        `<tr>
+          <td><strong>${escapeHtml(r.key)}</strong></td>
+          <td>${escapeHtml(r.title ?? "—")}</td>
+          <td>${escapeHtml(r.content.slice(0, 60))}${r.content.length > 60 ? "…" : ""}</td>
+          <td class="muted">${new Date(r.updated_at).toLocaleDateString()}</td>
+          <td><a href="/admin/content/${tenant.slug}/${r.key}">Edit</a></td>
+        </tr>`
+    )
+    .join("");
+  return c.html(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Client Content – Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>${ADMIN_STYLES}</style>
+    <script>${ADMIN_FETCH_SCRIPT}</script>
+  </head>
+  <body>
+    <header>
+      <h1>Client Content</h1>
+      ${adminNav("content")}
+      <span style="margin-left:auto;">${tenantSel}</span>
+    </header>
+    <main>
+      <div class="card">
+        <h2>Content keys (menu, hours, pricing, faq)</h2>
+        <p class="muted">Edit via API: <code>PUT /admin/api/tenants/:tenantId/content/:key</code> with <code>{ title?, content }</code></p>
+        ${contentList.length === 0 ? '<div class="empty-state">No client content. Add via API or seed.</div>' : `
+        <table>
+          <thead><tr><th>Key</th><th>Title</th><th>Content</th><th>Updated</th><th></th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`}
+      </div>
+    </main>
+  </body>
+</html>`);
+});
+
+// Content edit page (single key)
+app.get("/admin/content/:tenantSlug/:key", async (c) => {
+  if (!isAdminRequest(c)) {
+    return c.html("<h1>Unauthorized</h1><p>Missing or invalid admin token.</p>", 401);
+  }
+  const tenantSlug = c.req.param("tenantSlug");
+  const key = c.req.param("key");
+  const { data: tenant } = await adminSupabase
+    .from("tenants")
+    .select("id,name,slug")
+    .eq("slug", tenantSlug)
+    .single();
+  if (!tenant) return c.html("<h1>Not found</h1>", 404);
+  const { data: row } = await adminSupabase
+    .from("client_content")
+    .select("id,key,title,content,updated_at")
+    .eq("tenant_id", tenant.id)
+    .eq("key", key)
+    .single();
+  const content = row ?? { key, title: "", content: "" };
+  return c.html(`<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Edit ${escapeHtml(key)} – Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>${ADMIN_STYLES}</style>
+    <script>${ADMIN_FETCH_SCRIPT}</script>
+  </head>
+  <body>
+    <header>
+      <a href="/admin/content?tenantSlug=${tenantSlug}">← Content</a>
+      <h1>Edit ${escapeHtml(key)}</h1>
+    </header>
+    <main>
+      <div class="card">
+        <form id="form" onsubmit="return save(event)">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="title" value="${escapeHtml(content.title ?? "")}" />
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <textarea id="content" style="min-height:200px;">${escapeHtml(content.content ?? "")}</textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </main>
+    <script>
+      const base = "/admin/api/tenants/${tenant.id}/content/${key}";
+      const fetchFn = window.adminFetch || fetch;
+      function save(e) { e.preventDefault();
+        fetchFn(base, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: document.getElementById("title").value, content: document.getElementById("content").value }) })
+          .then(r => r.json()).then(d => { if (d.error) alert(d.error); else location.href="/admin/content?tenantSlug=${tenantSlug}"; });
+        return false;
+      }
+    </script>
   </body>
 </html>`);
 });

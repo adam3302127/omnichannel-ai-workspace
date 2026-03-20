@@ -8,6 +8,7 @@ import {
   touchConversation,
 } from "../memory/conversations";
 import { getClientContentText } from "../memory/clientContent";
+import { getKnowledgeBaseText } from "../memory/knowledgeBase";
 import { generateResponse } from "./ai";
 import { parseActionBlock, triggerN8nWebhook } from "./actions";
 import {
@@ -76,6 +77,17 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     input.isGroup
   );
 
+  // Inject evolving knowledge base (learnings that improve answers over time)
+  try {
+    const knowledgeText = await getKnowledgeBaseText(tenant.id);
+    if (knowledgeText) {
+      systemPrompt += knowledgeText;
+      console.log("[Router] Injected knowledge base learnings");
+    }
+  } catch (err) {
+    console.error("[Router] Knowledge base fetch failed:", err instanceof Error ? err.message : err);
+  }
+
   // Lightweight intent detection for client_content-backed answers
   const lower = input.text.toLowerCase();
   let contentKey: string | null = null;
@@ -92,10 +104,13 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
       "\n\nCRITICAL: The user wants a quote/order. BUILD IT NOW with dollar amounts. Do NOT ask 'what are you looking for', 'are you ordering products', or any clarifying questions. Use the sheet: pick strains, apply tiers, add shipping. Budget (e.g. $5k) → split across categories. 'Mix of all 3' → Bulk Flower + THCP + PreRolls. Only ask for details if they want to proceed. dep = value exotics/light dep.";
   }
 
-  const isMediaRequest = /video|media|watch|link for|send me the (video|media)/i.test(lower);
+  const isMediaRequest =
+    /video|media|watch|link for|send me (the )?(video|media)|videos? of (deps?|value exotic|vex|exotic)|videos? of (the )?exotics?|(exotic|exotics).*video|value exotic.*video|deps?.*video|video links? of (the )?exotics?/i.test(
+      lower
+    );
   if (isMediaRequest) {
     systemPrompt +=
-      "\n\nCRITICAL: You HAVE the video links. Send them labeled: STRAIN NAME: URL. Do NOT discuss lead capture, appointments, or other actions. Just the labeled video links.";
+      "\n\nCRITICAL: REFERENCE_CONTENT below contains the live sheet with video URLs in the Media column. You MUST extract and send them. NEVER say 'I don't have access' or 'I don't have video links'—they ARE in the data. 'exotics'/'exotic' = VALUE EXOTIC/VEX in Bulk Flower. Output format: STRAIN NAME: https://... (one per line). Nothing else.";
   }
 
   // Quote takes precedence: "build me $5k order" = quote, not menu
@@ -131,8 +146,8 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
     try {
       const { text: quoteText, sheetUrl } = await getFreshBrosQuoteContext();
       const rules = isMediaRequest
-        ? `RULES: Send video links ONLY. Label each: "STRAIN NAME: https://..." one per line. "deps" = VALUE EXOTIC/VEX in Bulk Flower. Skip "Coming Soon". No questions, no other actions.`
-        : `RULES: BUILD THE ORDER NOW. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
+        ? `RULES: The REFERENCE_CONTENT above contains the live sheet with a Media column. EXTRACT every https:// URL you find (drive.google.com, youtube.com, etc) and output them as "STRAIN NAME: URL" one per line. "exotics"/"exotic"/"deps"/"VEX" = VALUE EXOTIC section in Bulk Flower. NEVER say you don't have access—the URLs ARE in the data. Output ONLY the labeled links, nothing else.`
+        : `RULES: BUILD THE ORDER NOW. You HAVE the live inventory above. NEVER say you don't have access. Do NOT ask what they want. Use ALL tabs in the sheet. Pick products, apply tiers, add shipping. Be CONCISE. End with: Live sheet: ${sheetUrl}`;
       userText =
         `REFERENCE_CONTENT_START\n` +
         `REFERENCE_KEY: live_inventory_quote\n` +
@@ -253,7 +268,7 @@ export async function routeIncomingMessage(input: IncomingMessage): Promise<Rout
         `${overview}\n` +
         `REFERENCE_CONTENT_END\n\n` +
         `User: ${input.text}\n\n` +
-        `RULES: You HAVE access to the live inventory above. Use it to answer. Be CONCISE: 2-4 sentences, bullet points for lists. Do NOT say you don't have the menu. Share relevant categories briefly and include the live sheet link.`;
+        `RULES: You HAVE the live inventory above. NEVER say you don't have access to menu, videos, or product info. Use it to answer. Be CONCISE: 2-4 sentences, bullet points for lists. Share relevant categories briefly and include the live sheet link.`;
       console.log("[Router] Injected inventory overview for product-related fallback");
     } catch (err) {
       console.error("[Router] Fallback overview failed:", err instanceof Error ? err.message : err);
