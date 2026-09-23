@@ -1,0 +1,36 @@
+{
+  "store": "freshbros.com (WooCommerce retail)",
+  "basis": "Order-date sales from Woo Analytics. Not bank cash. Authorize.Net settles with a lag.",
+  "compiled": "2026-09-23",
+  "daily": [
+    {"date": "2026-09-01", "orders": 40, "gross": 8637.85, "returns": 0.00,    "net": 8610.85,  "total": 8715.85,  "status": "locked"},
+    {"date": "2026-09-02", "orders": 30, "gross": 7123.07, "returns": 0.00,    "net": 7083.07,  "total": 7143.07,  "status": "locked"},
+    {"date": "2026-09-03", "orders": 29, "gross": 5208.42, "returns": 1096.75, "net": 4109.67,  "total": 4199.67,  "status": "locked"},
+    {"date": "2026-09-04", "orders": 56, "gross": 10353.33,"returns": 209.00,  "net": 10049.44, "total": 10244.44, "status": "locked"},
+    {"date": "2026-09-05", "orders": 28, "gross": 5217.93, "returns": 0.00,    "net": 5217.93,  "total": 5322.93,  "status": "locked"},
+    {"date": "2026-09-06", "orders": 36, "gross": 4797.41, "returns": 5.41,    "net": 4762.76,  "total": 4897.76,  "status": "locked"},
+    {"date": "2026-09-07", "orders": 45, "gross": 10403.93,"returns": 158.08,  "net": 10253.35, "total": 10425.85, "status": "locked"},
+    {"date": "2026-09-08", "orders": 34, "gross": 5938.34, "returns": 0.00,    "net": 5899.75,  "total": 5989.75,  "status": "locked"},
+    {"date": "2026-09-09", "orders": 28, "gross": null,    "returns": null,    "net": 5555.71,  "total": null,     "status": "derived",
+     "note": "Sep 1-9 Woo Analytics rollup ($61,542.53 / 326 orders) minus the locked Sep 1-8 net ($55,986.82 / 298). Rollup basis is non-refunded revenue, so treat as approx."}
+  ],
+  "monthly_2026": [
+    {"month": "2026-03", "orders": 568, "revenue": 110705.35, "customers": 435, "days_covered": 23, "note": "Mar 9-31 only"},
+    {"month": "2026-04", "orders": 932, "revenue": 163012.26, "customers": 759, "days_covered": 30},
+    {"month": "2026-05", "orders": 693, "revenue": 112401.32, "customers": 599, "days_covered": 31},
+    {"month": "2026-06", "orders": 746, "revenue": 144864.49, "customers": 610, "days_covered": 30},
+    {"month": "2026-07", "orders": 921, "revenue": 172484.56, "customers": 724, "days_covered": 31},
+    {"month": "2026-08", "orders": 813, "revenue": 143387.84, "customers": 631, "days_covered": 31},
+    {"month": "2026-09", "orders": 326, "revenue": 61542.53,  "customers": 294, "days_covered": 9,  "note": "Sep 1-9 only"}
+  ],
+  "sources": [
+    "Cash Calendar LIVE v57 artifact, WOOCOMMERCE_SALES block (Sep 1-8 daily, locked Sep 9)",
+    "Drive: Woo Analytics monthly - Mar9-Sep9 2026 (from WooComm), sheet 1YFK88nquduC7qvcCZ6aNDLVGdLuSwwCSH7TVYJ2uk_4",
+    "Drive: growth-monthly.csv in 01_WooCommerce Growth (monthly rollup and gap notes)"
+  ],
+  "gaps": [
+    "Sep 10-23 2026: no daily pull exists anywhere reachable (Drive, Gmail, Close, Cash Calendar). Not invented.",
+    "Mar 9 - Aug 31 2026: monthly totals only. The per-order Woo Analytics CSV cited in the growth doc is not in Drive.",
+    "freshbros.com is denied by this session's network policy, so no live Woo REST pull was possible."
+  ]
+}

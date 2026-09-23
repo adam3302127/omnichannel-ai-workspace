@@ -1,0 +1,284 @@
+<title>Fresh Bros Retail Daily</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Archivo:wght@600;700&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0f1418;--surface:#161c22;--surface2:#1d252d;--line:#2a343e;
+  --ink:#e8edf2;--ink2:#a7b3bf;--mute:#6d7a87;
+  --accent:#3987e5;--accent-ink:#0f1418;
+  --h1:#104281;--h2:#1c5cab;--h3:#2a78d6;--h4:#5598e7;--h5:#86b6ef;
+  --h1t:#e8edf2;--h2t:#e8edf2;--h3t:#ffffff;--h4t:#0f1418;--h5t:#0f1418;
+  --warn:#fab219;--warn-bg:#2a2410;--good:#0ca30c;
+  --hatch:repeating-linear-gradient(135deg,transparent 0 5px,var(--line) 5px 6px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --bg:#f5f7f9;--surface:#ffffff;--surface2:#eef1f4;--line:#d7dee6;
+    --ink:#101418;--ink2:#4b5661;--mute:#7b8794;
+    --accent:#2a78d6;--accent-ink:#ffffff;
+    --h1:#cde2fb;--h2:#9ec5f4;--h3:#6da7ec;--h4:#2a78d6;--h5:#184f95;
+    --h1t:#101418;--h2t:#101418;--h3t:#101418;--h4t:#ffffff;--h5t:#ffffff;
+    --warn:#b57500;--warn-bg:#fff4d6;--good:#0a7f0a;
+  }
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#f5f7f9;--surface:#ffffff;--surface2:#eef1f4;--line:#d7dee6;
+  --ink:#101418;--ink2:#4b5661;--mute:#7b8794;
+  --accent:#2a78d6;--accent-ink:#ffffff;
+  --h1:#cde2fb;--h2:#9ec5f4;--h3:#6da7ec;--h4:#2a78d6;--h5:#184f95;
+  --h1t:#101418;--h2t:#101418;--h3t:#101418;--h4t:#ffffff;--h5t:#ffffff;
+  --warn:#b57500;--warn-bg:#fff4d6;--good:#0a7f0a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-block:18px 56px;padding-inline:16px}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:18px}
+h1,h2{font-family:"Archivo","IBM Plex Sans",sans-serif;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:26px;line-height:1.15}
+h2{font-size:15px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+.eyebrow{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.hero{display:grid;gap:6px}
+.hero .big{font-size:52px;font-weight:700;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.hero .sub{color:var(--ink2);font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 12px 10px;display:grid;gap:2px}
+.tile .l{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.tile .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.15}
+.tile .d{font-size:12px;color:var(--ink2)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink2);align-items:center}
+.legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid var(--line)}
+.legend .ramp{display:inline-flex;gap:2px;margin:0 6px 0 2px;vertical-align:-3px}
+.legend .ramp i{width:14px;height:14px;border-radius:2px;display:block}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{font-size:11px;color:var(--mute);text-align:center;font-weight:600;padding-bottom:2px}
+.day{aspect-ratio:1;border-radius:8px;background:var(--surface2);border:1px solid transparent;display:flex;flex-direction:column;justify-content:space-between;padding:6px 6px 5px;font-size:11px;color:var(--ink2);cursor:default;position:relative;min-width:0}
+.day .n{font-weight:600;font-size:12px;color:var(--ink)}
+.day .v{font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:visible}
+.day.blank{background:transparent}
+.day.data{cursor:pointer;color:inherit}
+.day.data:hover,.day.data:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.day.data.sel{outline:2px solid var(--ink);outline-offset:1px}
+.day.derived{border:1.5px dashed var(--warn)}
+.day.nolock{background:var(--hatch);color:var(--mute)}
+.day.nolock .n{color:var(--mute)}
+.day.future{background:transparent;border:1px dashed var(--line);color:var(--mute)}
+.day.future .n{color:var(--mute)}
+.day .tag{font-size:9px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+@media (max-width:420px){.day{padding:4px 4px 4px;border-radius:6px}.day .v{font-size:10px}.day .n{font-size:11px}.day .tag{font-size:8px}}
+.detail{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px}
+.detail .dh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.detail .dh b{font-size:16px}
+.detail .row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+@media (max-width:520px){.detail .row{grid-template-columns:repeat(3,1fr)}}
+.detail .cell .l{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+.detail .cell .v{font-weight:600;font-variant-numeric:tabular-nums}
+.note{font-size:12.5px;color:var(--ink2);line-height:1.45}
+.callout{background:var(--warn-bg);border:1px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink);display:grid;gap:4px}
+.callout b{color:var(--warn)}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
+th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+th:first-child,td:first-child{text-align:left}
+td{font-variant-numeric:tabular-nums}
+tr.derived td{color:var(--ink2)}
+tr.total td{font-weight:700;border-top:2px solid var(--line);border-bottom:none}
+.pill{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);margin-left:6px;vertical-align:1px}
+.pill.warn{border-color:var(--warn);color:var(--warn)}
+.pill.ok{border-color:var(--good);color:var(--good)}
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:"IBM Plex Sans",sans-serif;fill:var(--ink2);font-size:11px}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .bar{fill:var(--accent)}
+.chart .bar.partial{fill:var(--h2)}
+.chart .lbl{fill:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.chart .mo{fill:var(--ink2)}
+.months{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+@media (max-width:640px){.months{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:420px){.months{grid-template-columns:repeat(2,1fr)}}
+.mo-card{background:var(--surface2);border-radius:8px;padding:8px;display:grid;gap:1px;font-size:11px;color:var(--ink2)}
+.mo-card b{font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
+.mo-card .m{font-weight:600;color:var(--ink)}
+ol,ul{padding-left:20px;display:grid;gap:5px;font-size:13.5px}
+li{line-height:1.45}
+code{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:4px}
+.src{font-size:12px;color:var(--mute);line-height:1.5;display:grid;gap:4px}
+a{color:var(--accent)}
+@media (prefers-reduced-motion:no-preference){.day.data{transition:outline-color .12s}}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">freshbros.com · WooCommerce retail · order-date sales</div>
+  <h1>Retail Daily Revenue Calendar</h1>
+  <div class="big num" id="heroNum">$61,542.53</div>
+  <div class="sub">September 2026 month-to-date net sales, Sep 1–9 · 326 orders · locked from Woo Analytics on Sep 9</div>
+</header>
+
+<section class="kpis" aria-label="September summary">
+  <div class="tile"><div class="l">Avg net / day</div><div class="v num">$6,998</div><div class="d">Sep 1–8, locked days only</div></div>
+  <div class="tile"><div class="l">Best day</div><div class="v num">$10,253</div><div class="d">Sun Sep 7 · 45 orders</div></div>
+  <div class="tile"><div class="l">Softest day</div><div class="v num">$4,110</div><div class="d">Wed Sep 3 · $1,097 returns</div></div>
+  <div class="tile"><div class="l">Net AOV</div><div class="v num">$187.88</div><div class="d">Sep 1–8 · 298 orders</div></div>
+</section>
+
+<section class="panel" aria-label="September 2026 calendar">
+  <div class="panel-h">
+    <h2>September 2026</h2>
+    <div class="legend">
+      <span><span class="ramp"><i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i><i style="background:var(--h5)"></i></span>net $4k → $10k+</span>
+      <span><span class="sw" style="border:1.5px dashed var(--warn);background:transparent"></span>derived</span>
+      <span><span class="sw" style="background:var(--hatch)"></span>no daily pull yet</span>
+    </div>
+  </div>
+  <div class="grid" id="cal" role="grid"></div>
+  <div class="detail" id="detail"></div>
+</section>
+
+<div class="callout">
+  <b>Sep 10 → Sep 23 has no daily numbers anywhere I can reach.</b>
+  <span>Not Drive, not Gmail, not Close, not the Cash Calendar. The freshbros.com Woo API is also denied by this session's network policy. Those days are hatched, not estimated. One export closes the gap: see “Fill the rest” below.</span>
+</div>
+
+<section class="panel" aria-label="Daily table">
+  <div class="panel-h"><h2>Day by day</h2><span class="note">Woo Analytics basis · net = gross − returns − coupons · total adds shipping</span></div>
+  <div class="tablewrap">
+  <table id="tbl">
+    <thead><tr><th>Date</th><th>Orders</th><th>Gross</th><th>Returns</th><th>Net sales</th><th>Total sales</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+  <p class="note">Sep 9 is derived: the Sep 1–9 Woo rollup ($61,542.53 / 326 orders) minus the locked Sep 1–8 net ($55,986.82 / 298). The rollup counts non-refunded revenue, so the Sep 9 line is approximate and gross, returns and shipping are unknown for that day.</p>
+</section>
+
+<section class="panel" aria-label="Monthly context">
+  <div class="panel-h"><h2>2026 by month · Woo Analytics</h2><span class="note">Non-refunded revenue. Mar covers Mar 9–31; Sep covers Sep 1–9.</span></div>
+  <svg class="chart" id="moChart" viewBox="0 0 720 220" role="img" aria-label="Monthly revenue Mar to Sep 2026"></svg>
+  <div class="months" id="moCards"></div>
+  <p class="note">Implied $/day is the month total divided by the days that month actually covers. It is arithmetic on the monthly lock, not a daily series. July was the peak at roughly $5.6k/day; the first nine days of September ran about $6.8k/day, ahead of every full month on file.</p>
+</section>
+
+<section class="panel" aria-label="How to fill the rest">
+  <h2>Fill the rest</h2>
+  <p class="note">One CSV turns this into a complete daily calendar back to March 9. Two ways to get it, fastest first.</p>
+  <ol>
+    <li><b>Manual export, two minutes.</b> In freshbros.com wp-admin go to <code>Analytics → Revenue</code>, set the date range to <code>Mar 9, 2026 – today</code>, set interval to <code>Day</code>, click Download. Drop the CSV in Drive under <code>01_WooCommerce Growth</code> and tell me. I append every day into this page and into Cash Calendar LIVE as a new version.</li>
+    <li><b>Standing automation.</b> Allow <code>freshbros.com</code> in this environment's network policy and add a read-only WooCommerce REST key (Consumer Key/Secret) as environment secrets. Then this page can be refreshed on a schedule from <code>wc-analytics/reports/revenue/stats?interval=day</code>, no human in the loop. The SiteGround captcha noted in your calendar rules may still block server-side calls; the manual export is the safe fallback.</li>
+  </ol>
+  <p class="note">Either way, nothing in this page is booked as cash. Order-date sales and FCB clears stay on separate lines, exactly as the calendar rules require.</p>
+</section>
+
+<section class="src" aria-label="Sources">
+  <div><b>Sources.</b> Sep 1–8 daily: Cash Calendar LIVE v57, WOOCOMMERCE_SALES block, locked Sep 9. Monthly and Sep 1–9 rollup: Drive sheet “Woo Analytics monthly — Mar9–Sep9 2026 (from WooComm)” and growth-monthly.csv in 01_WooCommerce Growth.</div>
+  <div>Compiled Sep 23, 2026. Retail vs wholesale split is not available on this store; wholesale runs through freshbroswholesale.com and is excluded here by construction.</div>
+</section>
+
+</div>
+
+<script>
+const DAILY=[
+ {d:'2026-09-01',o:40,g:8637.85,r:0,n:8610.85,t:8715.85,s:'locked'},
+ {d:'2026-09-02',o:30,g:7123.07,r:0,n:7083.07,t:7143.07,s:'locked'},
+ {d:'2026-09-03',o:29,g:5208.42,r:1096.75,n:4109.67,t:4199.67,s:'locked'},
+ {d:'2026-09-04',o:56,g:10353.33,r:209,n:10049.44,t:10244.44,s:'locked'},
+ {d:'2026-09-05',o:28,g:5217.93,r:0,n:5217.93,t:5322.93,s:'locked'},
+ {d:'2026-09-06',o:36,g:4797.41,r:5.41,n:4762.76,t:4897.76,s:'locked'},
+ {d:'2026-09-07',o:45,g:10403.93,r:158.08,n:10253.35,t:10425.85,s:'locked'},
+ {d:'2026-09-08',o:34,g:5938.34,r:0,n:5899.75,t:5989.75,s:'locked'},
+ {d:'2026-09-09',o:28,g:null,r:null,n:5555.71,t:null,s:'derived'}
+];
+const MONTHS=[
+ {m:'Mar',rev:110705.35,o:568,c:435,days:23,partial:true},
+ {m:'Apr',rev:163012.26,o:932,c:759,days:30},
+ {m:'May',rev:112401.32,o:693,c:599,days:31},
+ {m:'Jun',rev:144864.49,o:746,c:610,days:30},
+ {m:'Jul',rev:172484.56,o:921,c:724,days:31},
+ {m:'Aug',rev:143387.84,o:813,c:631,days:31},
+ {m:'Sep',rev:61542.53,o:326,c:294,days:9,partial:true}
+];
+const TODAY=23; // Sep 23, 2026 (compile date)
+const money=v=>v==null?'—':'$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const money0=v=>'$'+Math.round(v).toLocaleString('en-US');
+const k=v=>'$'+(v/1000).toFixed(1)+'k';
+const byDay={};DAILY.forEach(x=>byDay[+x.d.slice(-2)]=x);
+const step=n=>n<5000?1:n<6500?2:n<8000?3:n<9500?4:5;
+
+// ---- calendar grid (Sep 2026 starts on a Tuesday) ----
+const cal=document.getElementById('cal');
+['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(w=>{const e=document.createElement('div');e.className='dow';e.textContent=w;cal.appendChild(e)});
+for(let i=0;i<1;i++){const b=document.createElement('div');b.className='day blank';cal.appendChild(b)}
+let sel=null;
+for(let dnum=1;dnum<=30;dnum++){
+  const e=document.createElement('div');e.className='day';e.setAttribute('role','gridcell');
+  const x=byDay[dnum];
+  if(x){
+    e.classList.add('data');e.tabIndex=0;
+    const s=step(x.n);
+    if(x.s==='derived'){e.classList.add('derived');e.style.background='var(--surface2)';}
+    else{e.style.background=`var(--h${s})`;e.style.color=`var(--h${s}t)`;}
+    e.innerHTML=`<span class="n"${x.s!=='derived'?` style="color:var(--h${s}t)"`:''}>${dnum}</span><span class="v">${k(x.n)}</span>`;
+    if(x.s==='derived')e.innerHTML+=`<span class="tag" style="color:var(--warn)">derived</span>`;
+    e.addEventListener('click',()=>select(dnum));
+    e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();select(dnum)}});
+  }else if(dnum<=TODAY){
+    e.classList.add('nolock');e.innerHTML=`<span class="n">${dnum}</span><span class="tag">no pull</span>`;
+  }else{
+    e.classList.add('future');e.innerHTML=`<span class="n">${dnum}</span>`;
+  }
+  e.dataset.d=dnum;cal.appendChild(e);
+}
+function select(dnum){
+  sel=dnum;
+  cal.querySelectorAll('.day.sel').forEach(c=>c.classList.remove('sel'));
+  const c=cal.querySelector(`.day[data-d="${dnum}"]`);if(c)c.classList.add('sel');
+  const x=byDay[dnum];const det=document.getElementById('detail');
+  const dt=new Date(2026,8,dnum);const lbl=dt.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+  const cell=(l,v)=>`<div class="cell"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
+  det.innerHTML=`<div class="dh"><b>${lbl}</b><span class="pill ${x.s==='derived'?'warn':'ok'}">${x.s}</span></div>
+   <div class="row">${cell('Orders',x.o)}${cell('Gross',money(x.g))}${cell('Returns',money(x.r))}${cell('Net sales',money(x.n))}${cell('Total sales',money(x.t))}</div>
+   <div class="note">${x.s==='derived'?'Rollup minus locked Sep 1–8. Approximate; gross, returns and shipping not broken out for this day.':'Order-date sales from Woo Analytics, locked Sep 9. Not a bank clear.'}</div>`;
+  try{localStorage.setItem('fb_retail_cal_sel',String(dnum))}catch(e){}
+}
+let start=7;try{const s=parseInt(localStorage.getItem('fb_retail_cal_sel')||'');if(byDay[s])start=s}catch(e){}
+select(start);
+
+// ---- table ----
+const tb=document.querySelector('#tbl tbody');
+let so=0,sg=0,sr=0,sn=0,st=0;
+DAILY.forEach(x=>{
+  const dt=new Date(2026,8,+x.d.slice(-2));
+  const tr=document.createElement('tr');if(x.s==='derived')tr.className='derived';
+  tr.innerHTML=`<td>${dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}${x.s==='derived'?'<span class="pill warn">derived</span>':''}</td><td>${x.o}</td><td>${money(x.g)}</td><td>${money(x.r)}</td><td>${money(x.n)}</td><td>${money(x.t)}</td>`;
+  tb.appendChild(tr);
+  if(x.s==='locked'){so+=x.o;sg+=x.g;sr+=x.r;sn+=x.n;st+=x.t;}
+});
+const tr1=document.createElement('tr');tr1.className='total';
+tr1.innerHTML=`<td>Sep 1–8 locked</td><td>${so}</td><td>${money(sg)}</td><td>${money(sr)}</td><td>${money(sn)}</td><td>${money(st)}</td>`;tb.appendChild(tr1);
+const tr2=document.createElement('tr');tr2.className='total';
+tr2.innerHTML=`<td>Sep 1–9 rollup</td><td>326</td><td>—</td><td>—</td><td>${money(61542.53)}</td><td>—</td>`;tb.appendChild(tr2);
+
+// ---- monthly bar chart ----
+(function(){
+  const svg=document.getElementById('moChart');const W=720,H=220,L=48,R=12,T=26,B=34;
+  const iw=W-L-R,ih=H-T-B;const max=180000;
+  let s='';
+  [0,50000,100000,150000].forEach(v=>{const y=T+ih-(v/max)*ih;s+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v?('$'+v/1000+'k'):'0'}</text>`});
+  const slot=iw/MONTHS.length,bw=Math.min(24,slot*.5);
+  MONTHS.forEach((m,i)=>{
+    const x=L+slot*i+(slot-bw)/2;const h=(m.rev/max)*ih;const y=T+ih-h;
+    s+=`<path class="bar${m.partial?' partial':''}" d="M${x},${T+ih} V${y+4} a4,4 0 0 1 4,-4 h${bw-8} a4,4 0 0 1 4,4 V${T+ih} Z"><title>${m.m} 2026: ${money(m.rev)} · ${m.o} orders</title></path>`;
+    s+=`<text class="lbl" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${k(m.rev)}</text>`;
+    s+=`<text class="mo" x="${x+bw/2}" y="${H-12}" text-anchor="middle">${m.m}${m.partial?'*':''}</text>`;
+  });
+  svg.innerHTML=s;
+  const cards=document.getElementById('moCards');
+  MONTHS.forEach(m=>{const e=document.createElement('div');e.className='mo-card';
+    e.innerHTML=`<span class="m">${m.m}${m.partial?' *':''}</span><b>${money0(m.rev)}</b><span>${m.o} orders</span><span>${money0(m.rev/m.days)}/day implied</span>`;cards.appendChild(e)});
+})();
+</script>
