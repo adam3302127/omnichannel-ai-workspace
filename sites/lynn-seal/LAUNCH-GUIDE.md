@@ -20,10 +20,10 @@
 
 ## The video block
 
-Adam asked for the Facebook reel (facebook.com/share/r/1Dm8YEEFuv) to run on the site. Facebook is blocked from the build environment, so I could not view it. The About section has a vertical video slot that works two ways:
+Adam asked for the Facebook reel (facebook.com/reel/1190972569679629) to run on the site. Facebook is blocked from the build environment, so I could not view it. The About section has a vertical video slot that works two ways:
 
 1. **Best: self-host the MP4.** Download the reel from Facebook and save it as `assets/lynn-reel.mp4`. It will autoplay muted and loop, the way a reel does, with no Facebook branding and no dependency on their player.
-2. **Fallback: Facebook embed.** Until the MP4 exists, the slot shows a poster. Tapping it loads Facebook's embedded player. Facebook's player needs the reel's full permalink, so open the reel in a browser, copy the address (it will look like `facebook.com/reel/1234567890`), and replace the share link in `index.html` (search for `share/r/`). Note the embed will never play inside the Claude preview; that frame blocks third-party players.
+2. **Fallback: Facebook embed.** Until the MP4 exists, the live site loads Facebook's embedded player for the reel permalink Adam supplied (facebook.com/reel/1190972569679629), muted with autoplay. In the Claude preview and on local files, the slot shows a poster instead and tapping it loads the player; that frame blocks third-party players, so it will not play there.
 
 ## Verify with Lynn before publishing
 

@@ -23,16 +23,16 @@
    as the only ornament. Baskerville headings, Lato body. Photography does the talking. */
 :root{
   --bg:#FFFFFF; --paper:#F3F5F9; --fg:#12213A; --muted:#5B6579; --rule:#D8DEE8;
-  --navy:#0B2545; --navy-2:#153563; --navy-ink:#FFFFFF; --brass:#B08D57; --brass-soft:#EFE6D6; --block:#0B2545; --block-ink:#FFFFFF;
+  --navy:#0B2545; --navy-2:#153563; --navy-ink:#FFFFFF; --brass:#B08D57; --brass-soft:#EFE6D6; --block:#0B2545; --block-ink:#FFFFFF; --red:#B5121B;
   --display:"Libre Baskerville", Baskerville, "Times New Roman", Georgia, serif;
   --body:"Lato", "Helvetica Neue", Arial, sans-serif;
   --script:"Great Vibes", "Brush Script MT", cursive;
   --max:1120px; --gutter:clamp(16px,4vw,40px);
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; color-scheme:dark }
+  :root:not([data-theme="light"]){ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; --red:#E8646C; color-scheme:dark }
 }
-:root[data-theme="dark"]{ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; color-scheme:dark }
+:root[data-theme="dark"]{ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; --red:#E8646C; color-scheme:dark }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
@@ -63,7 +63,7 @@ section{padding-block:clamp(52px,7vw,96px)}
 .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg);border-bottom:1px solid var(--rule)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:70px}
 .brand{display:flex;flex-direction:column;text-decoration:none;line-height:1.1}
-.brand .name{font-family:var(--display);font-size:1.3rem;color:var(--navy)}
+.brand .name{font-family:var(--script);font-size:2rem;line-height:.9;color:var(--red)}
 .brand .title{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.2rem;white-space:nowrap}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:1.3rem;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;white-space:nowrap}
 .nav .call{white-space:nowrap}
@@ -78,16 +78,28 @@ section{padding-block:clamp(52px,7vw,96px)}
   .nav .call{display:none}
 }
 
-/* hero */
-.hero{padding-block:clamp(36px,5vw,72px)}
-.hero .grid{display:grid;grid-template-columns:1fr .9fr;gap:clamp(28px,5vw,64px);align-items:center}
-.hero .copy{display:grid;gap:1.2rem}
+/* hero: full-bleed banner built from the portrait */
+.hero{position:relative;color:#fff;background:#0B2545 url("assets/hero-lynn-wide.jpg") right center/cover no-repeat;padding-block:clamp(64px,9vw,128px);min-height:min(78vh,760px);display:flex;align-items:center}
+.hero .wrap{width:100%}
+.hero .copy{display:grid;gap:1.2rem;max-width:34rem}
+.hero h1{color:#fff}
+.hero .lede{color:rgba(255,255,255,.86)}
+.hero .rule{background:#D8BE8E}
 .badges{display:flex;flex-wrap:wrap;gap:.6rem}
-.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--brass);color:var(--navy);padding:.45rem .85rem;font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;background:var(--bg)}
-.badge::before{content:"";width:6px;height:6px;background:var(--brass);transform:rotate(45deg)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(216,190,142,.85);color:#fff;padding:.45rem .85rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:rgba(11,37,69,.35);backdrop-filter:blur(4px)}
+.badge::before{content:"";width:6px;height:6px;background:#D8BE8E;transform:rotate(45deg)}
 .hero .actions{display:flex;flex-wrap:wrap;gap:.8rem}
-.hero .contactline{font-size:.95rem;color:var(--muted)}
-.hero .contactline b{color:var(--fg)}
+.hero .btn.primary{background:#fff;color:#0B2545;border-color:#fff}
+.hero .btn.primary:hover{background:#E9EEF6}
+.hero .btn.ghost{color:#fff;border-color:#fff}
+.hero .btn.ghost:hover{background:rgba(255,255,255,.12)}
+.hero .contactline{font-size:.95rem;color:rgba(255,255,255,.8)}
+.hero .contactline b{color:#fff}
+.hero .cap{position:absolute;right:var(--gutter);bottom:1rem;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+@media (max-width:900px){
+  .hero{background:#0B2545 url("assets/hero-lynn-tall.jpg") center top/100% auto no-repeat;align-items:end;min-height:0;padding-top:min(88vw,520px);padding-bottom:2.6rem}
+  .hero .cap{display:none}
+}
 
 /* stats */
 .stats{background:var(--block);color:var(--block-ink)}
@@ -99,13 +111,6 @@ section{padding-block:clamp(52px,7vw,96px)}
 .stat .l{font-size:.8rem;letter-spacing:.04em;opacity:.85}
 @media (max-width:800px){.stats .wrap{grid-template-columns:1fr 1fr}.stat{border-right:0!important;padding-left:0!important;border-bottom:1px solid rgba(128,128,128,.25)}.stat:nth-child(odd){padding-right:1.2rem}.stat:nth-child(even){padding-left:1.2rem!important}.stat:nth-last-child(-n+2){border-bottom:0}}
 .stats .stat{border-color:rgba(255,255,255,.18)}
-
-/* hero portrait: framed, pulled back */
-.portrait{position:relative;justify-self:end;width:min(100% - 14px,360px);margin:0 14px 14px 0;background:var(--bg);padding:14px;border:1px solid var(--rule)}
-.portrait img{width:100%;aspect-ratio:9/10;object-fit:cover;object-position:top;display:block}
-.portrait::after{content:"";position:absolute;inset:14px -14px -14px 14px;border:1.5px solid var(--brass);z-index:-1}
-.portrait .cap{margin-top:.9rem;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
-@media (max-width:900px){.hero .grid{grid-template-columns:1fr}.portrait{justify-self:start;width:min(100% - 14px,320px)}}
 
 /* about */
 .about .grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:start}
@@ -270,7 +275,7 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
 <main id="top">
 
 <section class="hero">
-  <div class="wrap grid">
+  <div class="wrap">
     <div class="copy">
       <div class="badges">
         <span class="badge">Downing-Frye Top Producer</span>
@@ -285,11 +290,8 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
       </div>
       <p class="contactline"><b>(810) 691-6829</b> &nbsp;·&nbsp; <b>lynnsealnaples@gmail.com</b></p>
     </div>
-    <figure class="portrait">
-      <img src="assets/lynn-seal.jpg" alt="Lynn Seal, PA, REALTOR® with Downing-Frye Realty" width="486" height="540">
-      <figcaption class="cap">Lynn Seal, PA · Downing-Frye Realty</figcaption>
-    </figure>
   </div>
+  <span class="cap">Lynn Seal, PA · Downing-Frye Realty, Inc.</span>
 </section>
 
 <div class="stats" aria-label="Career highlights">
@@ -306,7 +308,7 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
     <div>
       <div class="video" id="video">
         <video id="reel" muted loop playsinline autoplay preload="metadata" poster="assets/naples-pier-sunset.jpg" hidden><source src="assets/lynn-reel.mp4" type="video/mp4"></video>
-        <a class="poster" id="poster" href="https://www.facebook.com/share/r/1Dm8YEEFuv/" target="_blank" rel="noopener"><span><i class="play"></i><b>Watch Lynn's latest reel</b><small>Tap to play · Facebook</small></span></a>
+        <a class="poster" id="poster" href="https://www.facebook.com/reel/1190972569679629" target="_blank" rel="noopener"><span><i class="play"></i><b>Watch Lynn's latest reel</b><small>Tap to play · Facebook</small></span></a>
       </div>
       <p class="video-cap">Lynn's latest reel from Treviso Bay.</p>
     </div>
@@ -576,7 +578,7 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
   <div class="wrap">
     <div class="row">
       <div>
-        <div style="font-family:var(--display);font-size:1.15rem;color:var(--navy)">Lynn Seal, PA · REALTOR®</div>
+        <div><span style="font-family:var(--script);font-size:1.8rem;color:var(--red);line-height:1">Lynn Seal</span> <span style="font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--navy);margin-left:.4rem">PA · REALTOR®</span></div>
         <div>Downing-Frye Realty, Inc. · Naples, Florida · (810) 691-6829 · lynnsealnaples@gmail.com</div>
       </div>
       <div class="eh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5M5.5 10v9h13v-9M10 19v-5h4v5"/></svg><span>Equal Housing Opportunity</span></div>
@@ -600,13 +602,19 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
   if(reel&&vw){
     reel.addEventListener('loadeddata',function(){reel.hidden=false;vw.classList.add('playing');reel.play().catch(function(){});});
     reel.addEventListener('error',function(){reel.remove();},true);
-    poster.addEventListener('click',function(e){
-      if(reel.parentNode&&reel.readyState>0){return;}
-      e.preventDefault();
+    function embed(){
+      if(vw.querySelector('iframe'))return;
       var f=document.createElement('iframe');f.title='Lynn Seal on Facebook';f.allow='autoplay; encrypted-media; picture-in-picture; web-share';f.allowFullscreen=true;
       f.src='https://www.facebook.com/plugins/video.php?href='+encodeURIComponent(poster.href)+'&show_text=false&autoplay=true&mute=true';
       vw.appendChild(f);vw.classList.add('playing');
       var open=document.createElement('a');open.href=poster.href;open.target='_blank';open.rel='noopener';open.textContent='Open on Facebook';open.style.cssText='position:absolute;left:0;right:0;bottom:0;padding:.5rem;text-align:center;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(11,37,69,.85);text-decoration:none';vw.appendChild(open);
+    }
+    var preview=location.protocol==='file:'||/claude|localhost/.test(location.hostname);
+    reel.addEventListener('error',function(){if(!preview)embed();},true);
+    poster.addEventListener('click',function(e){
+      if(reel.parentNode&&reel.readyState>0){return;}
+      e.preventDefault();
+      embed();
     });
   }
   var btn=document.getElementById('menuBtn'), menu=document.getElementById('menu');
