@@ -1,16 +1,16 @@
 # Photo drop-in guide
 
-The site renders completely without any photos (every image slot falls back to a typographic tile),
-but it looks its best with real photography. Drop files in with these exact names:
+Photos currently in this folder were captured at web resolution from Lynn's public agent profiles (Downing-Frye, Homes.com) and from Wikimedia Commons (Naples pier and beach, CC BY-SA, credited in the site footer). Replace the portraits and listing photos with full-resolution originals before launch, keeping these exact filenames:
 
 | File | Used for | Recommended size |
 | --- | --- | --- |
-| `lynn-seal.jpg` | Hero portrait (4:5 crop, face upper third) | 1200 x 1500 px |
+| `lynn-seal.jpg` | Hero portrait (9:10 crop, face upper third) | 1200 x 1350 px |
+| `lynn-seal-2.jpg` | About-section portrait (square crop) | 1000 x 1000 px |
 | `og-cover.jpg` | Link preview when the site is shared by text or on social | 1200 x 630 px |
 | `listings/9529-avellino-way-2815.jpg` | 9529 Avellino Way #2815 | 1600 x 1200 px |
 | `listings/9546-firenze-cir.jpg` | 9546 Firenze Cir | 1600 x 1200 px |
 | `listings/9502-napoli-ln-26201.jpg` | 9502 Napoli Ln #26201 | 1600 x 1200 px |
-| `listings/171-indies-dr-e-101.jpg` | 171 Indies Dr E #101 | 1600 x 1200 px |
+| `listings/171-indies-dr-e-101.jpg` | 171 Indies Dr E #101 (currently uses the Naples beach photo as a stand-in; update `index.html` when the real photo is added) | 1600 x 1200 px |
 | `listings/195-peppermint-ln-w-881.jpg` | 195 Peppermint Ln W #881 | 1600 x 1200 px |
 
 Where to get them:

@@ -117,6 +117,11 @@ Note: the site's "Last 24 months" row combines Homes.com's seller (16) and buyer
 
 From trevisobay.club.properties and Lynn's own listing remarks: only TPC bundled-golf community in Naples; 18-hole TPC championship course; 64,000 sq ft main clubhouse; Villa Rilassare 15,000 sq ft amenity center; La Brezza resort pool and bar; staffed fitness center, aerobics and Pilates studio; tennis center with pro shop; pickleball, bocce, basketball; full-service spa; about 5 miles to the beaches and Fifth Avenue South. Club contact Kaitlin O'Dubhda (239) 302-5738 ext. 110.
 
+## Claims added at Adam's direction (not independently verified online)
+
+- Downing-Frye Top Producer (possibly Platinum level). No public Downing-Frye award page lists her; confirm tier with Lynn.
+- Treviso Bay's top-selling agent. Consistent with 40 closed MLS transactions in Wentworth Estates on Homes.com (the next most active agent shown there has 5), but not confirmed against NABOR production reports.
+
 ## Things I looked for and did not find
 
 - No personal website live today (sealantonioteam.com is dead).

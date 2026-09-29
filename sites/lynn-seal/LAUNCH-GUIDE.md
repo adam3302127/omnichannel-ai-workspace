@@ -15,10 +15,13 @@
 2. **Hosting.** This is a static site. Cloudflare Pages, Netlify, Vercel, or GitHub Pages will host it free. Point the domain, upload the `lynn-seal` folder, done. If you would rather keep it on WordPress.com or SiteGround alongside your other properties, upload `index.html` as a static page.
 3. **Contact form activation.** The form posts to FormSubmit (formsubmit.co) addressed to `lynnsealnaples@gmail.com`. The first submission from the live domain triggers a one-time activation email to Lynn's Gmail. She clicks "Activate", and every later submission lands in her inbox as a clean table. Nothing to configure, no account needed. If the mail service is ever unreachable, the page falls back to opening the visitor's email app pre-filled, and shows her email and phone as text.
    - Optional upgrade: replace FormSubmit with a GoHighLevel or Close webhook so every inquiry becomes a CRM lead with an automatic text-back. I can wire that in about ten lines.
-4. **Photos.** Add her headshot and five listing photos per `assets/README.md`. The page is complete without them (every image slot has a designed fallback), but her portrait is the single highest-impact addition.
+4. **Photos.** Two headshots (from her Downing-Frye and Homes.com profiles) and five listing photos are already in `assets/`, pulled at web resolution. Replace them with full-resolution originals from Lynn and Downing-Frye marketing before launch; see `assets/README.md`. The Naples pier and beach photos are Creative Commons and credited in the footer.
 5. **Update the canonical URL.** If the domain is not `lynnsealnaples.com`, search-and-replace that string in `index.html` (canonical link, Open Graph tags, JSON-LD, and the form's `_next` redirect).
 
 ## Verify with Lynn before publishing
+
+- **Top Producer wording.** The site says "Downing-Frye Top Producer" in the hero badge, About list, and footer. Confirm the exact award tier with Lynn (Downing-Frye recognizes Platinum, Gold, and Silver production levels). If she is Platinum, change the badge to "Downing-Frye Platinum Top Producer" in `index.html` (three occurrences).
+- **"Treviso Bay's Top-Selling Agent."** Supported by 40 closed MLS transactions inside the community, far more than any other agent found on the portals, but Lynn should confirm from NABOR MLS production reports before it goes live. Safe fallback wording if she prefers: "One of Treviso Bay's top-selling agents."
 
 - Which phone number to publish. Downing-Frye and her own posts use (810) 691-6829; Homes.com shows (810) 777-7386.
 - Her Florida DBPR license number (format SL#######) for the footer disclosure. The 249524674 shown on portals is her MLS agent ID.
@@ -67,4 +70,4 @@ Form submission → CRM lead → instant text ("Hi, it's Lynn. Got your note, I'
 
 ## Design notes
 
-Coastal editorial. Sea-salt white ground, deep gulf-teal accent, brass reserved for numbers. Marcellus for headlines (a Roman inscriptional face that suits the Tuscan and Mediterranean architecture of Treviso Bay) with Mulish for body text. Dark mode follows the viewer's system setting. Fully responsive to 400 px, with a fixed call-and-message bar on phones.
+Classic navy and white. White ground, deep navy type and blocks, a thin brass rule as the only ornament. Libre Baskerville headlines, Lato body. Six sections: hero, about, listings, sold, Treviso Bay, contact. Dark mode follows the viewer's system setting. Responsive to 400 px with a fixed call-and-message bar on phones.
