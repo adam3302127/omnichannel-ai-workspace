@@ -5,7 +5,8 @@ Photos currently in this folder were captured at web resolution from Lynn's publ
 | File | Used for | Recommended size |
 | --- | --- | --- |
 | `lynn-seal.jpg` | Hero portrait (9:10 crop, face upper third) | 1200 x 1350 px |
-| `lynn-seal-2.jpg` | About-section portrait (square crop) | 1000 x 1000 px |
+| `lynn-seal-thumb.jpg` | Small round portrait in the flyer footers | 320 x 320 px |
+| `lynn-reel.mp4` | Lynn's Facebook reel, self-hosted so it autoplays muted in the About section. Download it from Facebook (open the reel, three-dot menu, Download) and drop it here. Until this file exists the block shows a poster that opens the reel on Facebook. | 1080 x 1920, under 15 MB, H.264 |
 | `og-cover.jpg` | Link preview when the site is shared by text or on social | 1200 x 630 px |
 | `listings/9529-avellino-way-2815.jpg` | 9529 Avellino Way #2815 | 1600 x 1200 px |
 | `listings/9546-firenze-cir.jpg` | 9546 Firenze Cir | 1600 x 1200 px |
@@ -19,3 +20,5 @@ Where to get them:
 - Listing photos: Lynn already owns the rights to her MLS listing photography (Massa Designs shoots several of her tours). Use the primary exterior or the best lanai/lake shot.
 
 Export as JPEG at quality 80, sRGB. Keep each file under 400 KB so the page stays fast on a phone.
+
+Sold-property photos in `listings/` (Corso Bello, Amour, Firenze 9571 and 9555, Italia, Galley, Piacere 9446 and 9522, Venezia, Hawkesbury) were captured at web size from public listing pages. Lynn owns the originals through her MLS photographers; swap in full-resolution files with the same names.
