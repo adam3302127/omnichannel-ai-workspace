@@ -42,6 +42,7 @@ img{max-width:100%;display:block}
 a{color:inherit}
 h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;margin:0;text-wrap:balance;color:var(--navy)}
 h1{font-size:clamp(2.1rem,4.4vw,3.4rem)}
+h1.tag{font-size:1.15rem;font-weight:400}
 h2{font-size:clamp(1.6rem,2.8vw,2.3rem)}
 h3{font-size:1.15rem}
 p{margin:0}
@@ -62,7 +63,7 @@ section{padding-block:clamp(52px,7vw,96px)}
 /* nav */
 .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--bg);border-bottom:1px solid var(--rule)}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:70px}
-.brand{display:flex;flex-direction:column;text-decoration:none;line-height:1.1}
+.brand{display:flex;align-items:center;text-decoration:none;line-height:1.1}
 .brand .name{font-family:var(--script);font-size:2rem;line-height:.9;color:var(--red)}
 .brand .title{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.2rem;white-space:nowrap}
 .nav ul{list-style:none;margin:0;padding:0;display:flex;gap:1.3rem;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;font-weight:700;white-space:nowrap}
@@ -78,28 +79,31 @@ section{padding-block:clamp(52px,7vw,96px)}
   .nav .call{display:none}
 }
 
-/* hero: full-bleed banner built from the portrait */
-.hero{position:relative;color:#fff;background:#0B2545 url("assets/hero-lynn-wide.jpg") right center/cover no-repeat;padding-block:clamp(64px,9vw,128px);min-height:min(78vh,760px);display:flex;align-items:center}
+/* hero: the business card, horizontal across the page */
+.hero{position:relative;background:#FFFFFF url("assets/hero-card-wide.jpg") right center/cover no-repeat;padding-block:clamp(40px,5vw,72px);min-height:min(62vh,620px);display:flex;align-items:center;color:var(--fg)}
 .hero .wrap{width:100%}
-.hero .copy{display:grid;gap:1.2rem;max-width:34rem}
-.hero h1{color:#fff}
-.hero .lede{color:rgba(255,255,255,.86)}
-.hero .rule{background:#D8BE8E}
+.hero .copy{display:grid;gap:1.1rem;max-width:30rem;justify-items:start}
+.hero .wordmark{width:min(100%,340px);height:auto}
+.hero .big{font-family:var(--body);font-weight:700;font-size:clamp(1.6rem,2.6vw,2.1rem);color:#0B2545;letter-spacing:.01em;line-height:1.1}
+.hero .email{font-size:1.1rem;color:#0B2545}
+.hero .df{display:flex;align-items:center;gap:.9rem;margin-top:.2rem}
+.hero .df img{width:96px;height:auto}
+.hero .df span{font-weight:700;font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;color:#0B2545}
+.hero .tag{font-family:var(--display);font-size:1.15rem;color:var(--muted);max-width:26rem;margin-top:.4rem}
 .badges{display:flex;flex-wrap:wrap;gap:.6rem}
-.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(216,190,142,.85);color:#fff;padding:.45rem .85rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:rgba(11,37,69,.35);backdrop-filter:blur(4px)}
-.badge::before{content:"";width:6px;height:6px;background:#D8BE8E;transform:rotate(45deg)}
+.badge{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--brass);color:#0B2545;padding:.45rem .85rem;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:rgba(255,255,255,.85)}
+.badge::before{content:"";width:6px;height:6px;background:var(--brass);transform:rotate(45deg)}
 .hero .actions{display:flex;flex-wrap:wrap;gap:.8rem}
-.hero .btn.primary{background:#fff;color:#0B2545;border-color:#fff}
-.hero .btn.primary:hover{background:#E9EEF6}
-.hero .btn.ghost{color:#fff;border-color:#fff}
-.hero .btn.ghost:hover{background:rgba(255,255,255,.12)}
-.hero .contactline{font-size:.95rem;color:rgba(255,255,255,.8)}
-.hero .contactline b{color:#fff}
-.hero .cap{position:absolute;right:var(--gutter);bottom:1rem;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.hero .btn.primary{background:#0B2545;color:#fff;border-color:#0B2545}
+.hero .btn.ghost{color:#0B2545;border-color:#0B2545}
 @media (max-width:900px){
-  .hero{background:#0B2545 url("assets/hero-lynn-tall.jpg") center top/100% auto no-repeat;align-items:end;min-height:0;padding-top:min(88vw,520px);padding-bottom:2.6rem}
-  .hero .cap{display:none}
+  .hero{background:#fff;padding-top:0;min-height:0;display:block}
+  .hero .cardphoto{display:block;width:100%;aspect-ratio:296/376;max-height:70vh;object-fit:contain;object-position:top;background:#fff}
+  .hero .wrap{padding-top:1.4rem}
 }
+@media (min-width:901px){.hero .cardphoto{display:none}}
+:root[data-theme="dark"] .hero,:root:not([data-theme="light"]) .hero{color:#12213A}
+.hero .badge,.hero .big,.hero .email,.hero .df span{color:#0B2545}
 
 /* stats */
 .stats{background:var(--block);color:var(--block-ink)}
@@ -257,7 +261,7 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="#top"><span class="name">Lynn Seal</span><span class="title">PA · REALTOR®</span></a>
+    <a class="brand" href="#top" aria-label="Lynn Seal home"><img src="assets/lynn-seal-wordmark.png" alt="Lynn Seal, REALTOR®" width="266" height="114" style="height:44px;width:auto;display:block"></a>
     <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu">Menu</button>
     <ul id="menu">
       <li><a href="#about">About</a></li>
@@ -275,23 +279,24 @@ footer .eh svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width
 <main id="top">
 
 <section class="hero">
+  <img class="cardphoto" src="assets/lynn-seal-card.jpg" alt="Lynn Seal" width="296" height="376">
   <div class="wrap">
     <div class="copy">
+      <img class="wordmark" src="assets/lynn-seal-wordmark.png" alt="Lynn Seal, REALTOR®" width="266" height="114">
+      <a class="big" href="tel:+18106916829" style="text-decoration:none">810-691-6829</a>
+      <a class="email" href="mailto:lynnsealnaples@gmail.com" style="text-decoration:none">LynnSealNaples@gmail.com</a>
+      <div class="df"><img src="assets/df-logo.png" alt="Downing-Frye" width="142" height="67"><span>Downing-Frye Realty, Inc.</span></div>
       <div class="badges">
         <span class="badge">Downing-Frye Top Producer</span>
         <span class="badge">Treviso Bay's Top-Selling Agent</span>
       </div>
-      <h1>Naples real estate, handled by someone who made the move herself.</h1>
-      <hr class="rule">
-      <p class="lede">Lynn Seal relocated from Michigan to Naples and built one of the most productive practices in Treviso Bay. Sixty-plus closed sales, more than $57 million in volume, and clients who hear back the same day.</p>
+      <h1 class="tag">Naples real estate, handled by someone who made the move herself.</h1>
       <div class="actions">
         <a class="btn primary" href="#contact">Contact Lynn</a>
         <a class="btn ghost" href="#listings">Current Listings</a>
       </div>
-      <p class="contactline"><b>(810) 691-6829</b> &nbsp;·&nbsp; <b>lynnsealnaples@gmail.com</b></p>
     </div>
   </div>
-  <span class="cap">Lynn Seal, PA · Downing-Frye Realty, Inc.</span>
 </section>
 
 <div class="stats" aria-label="Career highlights">

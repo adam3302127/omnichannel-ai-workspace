@@ -5,8 +5,10 @@ Photos currently in this folder were captured at web resolution from Lynn's publ
 | File | Used for | Recommended size |
 | --- | --- | --- |
 | `lynn-seal.jpg` | Source portrait; also used to generate the two hero banners below | 1200 x 1350 px |
-| `hero-lynn-wide.jpg` | Full-width hero banner, desktop. Generated from the portrait: photo on the right, blurred navy-tinted extension on the left. Replace with a real wide environmental photo of Lynn (on the golf course, at the clubhouse, with clients) when one is shot; 1920 x 1000, subject in the right third. | 1920 x 1000 px |
-| `hero-lynn-tall.jpg` | Phone hero banner, portrait crop with navy fade at the bottom | 900 x 1200 px |
+| `lynn-seal-card.jpg` | Wider headshot cut from Lynn's business card (296 x 376). The header is built from this; a full-resolution original from her photographer will sharpen it considerably. | 1200 x 1520 px |
+| `lynn-seal-wordmark.png` | Red script "Lynn Seal REALTOR®" wordmark cut from the card, transparent background. Used in the nav, header and footer. Replace with the vector or high-res version from her printer if available. | 1200 px wide |
+| `df-logo.png` | Downing-Frye "df" mark cut from the card | 600 px wide |
+| `hero-card-wide.jpg` | Desktop header band generated from the card photo: whole photo at right, blurred palm bokeh extension, white panel at left. Regenerate if the photo is replaced. | 1920 x 620 px |
 | `lynn-seal-thumb.jpg` | Small round portrait in the flyer footers | 320 x 320 px |
 | `lynn-reel.mp4` | Lynn's Facebook reel, self-hosted so it autoplays muted in the About section. Download it from Facebook (open the reel, three-dot menu, Download) and drop it here. Until this file exists the block shows a poster that opens the reel on Facebook. | 1080 x 1920, under 15 MB, H.264 |
 | `og-cover.jpg` | Link preview when the site is shared by text or on social | 1200 x 630 px |
