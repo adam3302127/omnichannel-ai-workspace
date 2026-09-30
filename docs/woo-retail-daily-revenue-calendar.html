@@ -9,7 +9,6 @@
   --h1:#104281;--h2:#1c5cab;--h3:#2a78d6;--h4:#5598e7;--h5:#86b6ef;
   --h1t:#e8edf2;--h2t:#e8edf2;--h3t:#ffffff;--h4t:#0f1418;--h5t:#0f1418;
   --warn:#fab219;--warn-bg:#2a2410;--good:#0ca30c;
-  --hatch:repeating-linear-gradient(135deg,transparent 0 5px,var(--line) 5px 6px);
 }
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
@@ -34,14 +33,17 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;padding-block:18px 56px;padding-inline:16px}
 .wrap{max-width:760px;margin:0 auto;display:grid;gap:18px}
-h1,h2{font-family:"Archivo","IBM Plex Sans",sans-serif;text-wrap:balance;letter-spacing:-.01em}
+h1,h2,h3{font-family:"Archivo","IBM Plex Sans",sans-serif;text-wrap:balance;letter-spacing:-.01em}
 h1{font-size:26px;line-height:1.15}
 h2{font-size:15px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+h3{font-size:17px}
 .eyebrow{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
 .num{font-variant-numeric:tabular-nums}
 .hero{display:grid;gap:6px}
 .hero .big{font-size:52px;font-weight:700;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .hero .sub{color:var(--ink2);font-size:14px}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--good);border:1px solid var(--good);border-radius:999px;padding:2px 8px;width:max-content}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 @media (max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
 .tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 12px 10px;display:grid;gap:2px}
@@ -51,45 +53,47 @@ h2{font-size:15px;color:var(--ink2);text-transform:uppercase;letter-spacing:.06e
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
 .panel-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .legend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--ink2);align-items:center}
-.legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid var(--line)}
+.legend .sw{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px dashed var(--line)}
 .legend .ramp{display:inline-flex;gap:2px;margin:0 6px 0 2px;vertical-align:-3px}
 .legend .ramp i{width:14px;height:14px;border-radius:2px;display:block}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;display:flex;gap:6px;flex-wrap:wrap}
+.nav a{font-size:12px;font-weight:600;color:var(--ink2);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--surface)}
+.nav a:hover,.nav a:focus-visible{border-color:var(--accent);color:var(--ink);outline:none}
+.month{scroll-margin-top:60px}
+.msum{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.msum b{color:var(--ink);font-variant-numeric:tabular-nums}
 .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .dow{font-size:11px;color:var(--mute);text-align:center;font-weight:600;padding-bottom:2px}
 .day{aspect-ratio:1;border-radius:8px;background:var(--surface2);border:1px solid transparent;display:flex;flex-direction:column;justify-content:space-between;padding:6px 6px 5px;font-size:11px;color:var(--ink2);cursor:default;position:relative;min-width:0}
 .day .n{font-weight:600;font-size:12px;color:var(--ink)}
-.day .v{font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:visible}
+.day .v{font-weight:600;font-size:12px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .day.blank{background:transparent}
 .day.data{cursor:pointer;color:inherit}
 .day.data:hover,.day.data:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .day.data.sel{outline:2px solid var(--ink);outline-offset:1px}
-.day.derived{border:1.5px dashed var(--warn)}
-.day.nolock{background:var(--hatch);color:var(--mute)}
-.day.nolock .n{color:var(--mute)}
 .day.future{background:transparent;border:1px dashed var(--line);color:var(--mute)}
 .day.future .n{color:var(--mute)}
-.day .tag{font-size:9px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
-@media (max-width:420px){.day{padding:4px 4px 4px;border-radius:6px}.day .v{font-size:10px}.day .n{font-size:11px}.day .tag{font-size:8px}}
+.day.zero{background:var(--surface2)}
+.day .rf{position:absolute;top:4px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--warn)}
+@media (max-width:420px){.day{padding:4px 4px 4px;border-radius:6px}.day .v{font-size:10px}.day .n{font-size:11px}}
 .detail{border-top:1px solid var(--line);padding-top:12px;display:grid;gap:8px}
 .detail .dh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
 .detail .dh b{font-size:16px}
-.detail .row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-@media (max-width:520px){.detail .row{grid-template-columns:repeat(3,1fr)}}
+.detail .row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+@media (max-width:560px){.detail .row{grid-template-columns:repeat(3,1fr)}}
 .detail .cell .l{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
 .detail .cell .v{font-weight:600;font-variant-numeric:tabular-nums}
 .note{font-size:12.5px;color:var(--ink2);line-height:1.45}
 .callout{background:var(--warn-bg);border:1px solid var(--warn);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--ink);display:grid;gap:4px}
 .callout b{color:var(--warn)}
 .tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
-th,td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:560px}
+th,td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.05em;font-weight:600;position:sticky;top:0;background:var(--surface)}
 th:first-child,td:first-child{text-align:left}
 td{font-variant-numeric:tabular-nums}
-tr.derived td{color:var(--ink2)}
-tr.total td{font-weight:700;border-top:2px solid var(--line);border-bottom:none}
-.pill{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);margin-left:6px;vertical-align:1px}
-.pill.warn{border-color:var(--warn);color:var(--warn)}
+tr.total td{font-weight:700;border-top:2px solid var(--line);background:var(--surface2)}
+.pill{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--ink2);vertical-align:1px}
 .pill.ok{border-color:var(--good);color:var(--good)}
 .chart{width:100%;height:auto;display:block}
 .chart text{font-family:"IBM Plex Sans",sans-serif;fill:var(--ink2);font-size:11px}
@@ -97,17 +101,25 @@ tr.total td{font-weight:700;border-top:2px solid var(--line);border-bottom:none}
 .chart .bar{fill:var(--accent)}
 .chart .bar.partial{fill:var(--h2)}
 .chart .lbl{fill:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
-.chart .mo{fill:var(--ink2)}
 .months{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 @media (max-width:640px){.months{grid-template-columns:repeat(4,1fr)}}
 @media (max-width:420px){.months{grid-template-columns:repeat(2,1fr)}}
 .mo-card{background:var(--surface2);border-radius:8px;padding:8px;display:grid;gap:1px;font-size:11px;color:var(--ink2)}
 .mo-card b{font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums}
 .mo-card .m{font-weight:600;color:var(--ink)}
-ol,ul{padding-left:20px;display:grid;gap:5px;font-size:13.5px}
-li{line-height:1.45}
-code{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:4px}
+.dows{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+@media (max-width:420px){.dows{grid-template-columns:repeat(4,1fr)}}
+.dows .c{background:var(--surface2);border-radius:8px;padding:8px;text-align:center;font-size:11px;color:var(--ink2)}
+.dows .c b{display:block;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.dows .c .bar{height:4px;border-radius:2px;background:var(--accent);margin:6px auto 0;max-width:100%}
+details.fold{border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+details.fold>summary{cursor:pointer;list-style:none;padding:12px 16px;font-family:"Archivo",sans-serif;font-size:15px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;display:flex;justify-content:space-between;align-items:center}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:'+';font-size:18px;color:var(--accent)}
+details.fold[open]>summary::after{content:'−'}
+details.fold>.body{padding:0 16px 16px;display:grid;gap:10px}
 .src{font-size:12px;color:var(--mute);line-height:1.5;display:grid;gap:4px}
+code{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--surface2);padding:1px 5px;border-radius:4px}
 a{color:var(--accent)}
 @media (prefers-reduced-motion:no-preference){.day.data{transition:outline-color .12s}}
 </style>
@@ -115,170 +127,161 @@ a{color:var(--accent)}
 <div class="wrap">
 
 <header class="hero">
-  <div class="eyebrow">freshbros.com · WooCommerce retail · order-date sales</div>
+  <div class="eyebrow">freshbros.com · WooCommerce retail · order-date sales · pulled from the Woo API</div>
   <h1>Retail Daily Revenue Calendar</h1>
-  <div class="big num" id="heroNum">$61,542.53</div>
-  <div class="sub">September 2026 month-to-date net sales, Sep 1–9 · 326 orders · locked from Woo Analytics on Sep 9</div>
+  <div class="big num" id="heroNum"></div>
+  <div class="sub" id="heroSub"></div>
+  <span class="live"><i></i>Source of truth: WooCommerce REST</span>
 </header>
 
-<section class="kpis" aria-label="September summary">
-  <div class="tile"><div class="l">Avg net / day</div><div class="v num">$6,998</div><div class="d">Sep 1–8, locked days only</div></div>
-  <div class="tile"><div class="l">Best day</div><div class="v num">$10,253</div><div class="d">Sun Sep 7 · 45 orders</div></div>
-  <div class="tile"><div class="l">Softest day</div><div class="v num">$4,110</div><div class="d">Wed Sep 3 · $1,097 returns</div></div>
-  <div class="tile"><div class="l">Net AOV</div><div class="v num">$187.88</div><div class="d">Sep 1–8 · 298 orders</div></div>
+<section class="kpis" id="kpis" aria-label="Summary"></section>
+
+<nav class="nav" id="nav" aria-label="Jump to month"></nav>
+
+<div id="months"></div>
+
+<section class="panel" aria-label="Monthly context">
+  <div class="panel-h"><h2>2026 by month</h2><span class="note">Net sales after refunds. September through the 29th.</span></div>
+  <svg class="chart" id="moChart" viewBox="0 0 720 220" role="img" aria-label="Monthly net revenue Mar to Sep 2026"></svg>
+  <div class="months" id="moCards"></div>
 </section>
 
-<section class="panel" aria-label="September 2026 calendar">
-  <div class="panel-h">
-    <h2>September 2026</h2>
-    <div class="legend">
-      <span><span class="ramp"><i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i><i style="background:var(--h5)"></i></span>net $4k → $10k+</span>
-      <span><span class="sw" style="border:1.5px dashed var(--warn);background:transparent"></span>derived</span>
-      <span><span class="sw" style="background:var(--hatch)"></span>no daily pull yet</span>
-    </div>
-  </div>
-  <div class="grid" id="cal" role="grid"></div>
-  <div class="detail" id="detail"></div>
+<section class="panel" aria-label="Day of week">
+  <div class="panel-h"><h2>Average net by weekday</h2><span class="note">All 213 days, Mar 1 – Sep 29.</span></div>
+  <div class="dows" id="dows"></div>
 </section>
 
-<div class="callout">
-  <b>Sep 10 → Sep 23 has no daily numbers anywhere I can reach.</b>
-  <span>Not Drive, not Gmail, not Close, not the Cash Calendar. The freshbros.com Woo API is also denied by this session's network policy. Those days are hatched, not estimated. One export closes the gap: see “Fill the rest” below.</span>
-</div>
+<div class="callout" id="gaps"></div>
 
-<section class="panel" aria-label="Daily table">
-  <div class="panel-h"><h2>Day by day</h2><span class="note">Woo Analytics basis · net = gross − returns − coupons · total adds shipping</span></div>
+<details class="fold">
+  <summary>Day by day, all 213 rows</summary>
+  <div class="body">
+  <p class="note">gross = order total − shipping · net = gross − refunds · total = order total including shipping. Countable statuses only: processing, completed, on-hold, refunded. Failed, cancelled and pending orders excluded.</p>
   <div class="tablewrap">
   <table id="tbl">
-    <thead><tr><th>Date</th><th>Orders</th><th>Gross</th><th>Returns</th><th>Net sales</th><th>Total sales</th></tr></thead>
+    <thead><tr><th>Date</th><th>Orders</th><th>Gross</th><th>Refunds</th><th>Net</th><th>Shipping</th><th>Discount</th><th>Total</th></tr></thead>
     <tbody></tbody>
   </table>
   </div>
-  <p class="note">Sep 9 is derived: the Sep 1–9 Woo rollup ($61,542.53 / 326 orders) minus the locked Sep 1–8 net ($55,986.82 / 298). The rollup counts non-refunded revenue, so the Sep 9 line is approximate and gross, returns and shipping are unknown for that day.</p>
-</section>
-
-<section class="panel" aria-label="Monthly context">
-  <div class="panel-h"><h2>2026 by month · Woo Analytics</h2><span class="note">Non-refunded revenue. Mar covers Mar 9–31; Sep covers Sep 1–9.</span></div>
-  <svg class="chart" id="moChart" viewBox="0 0 720 220" role="img" aria-label="Monthly revenue Mar to Sep 2026"></svg>
-  <div class="months" id="moCards"></div>
-  <p class="note">Implied $/day is the month total divided by the days that month actually covers. It is arithmetic on the monthly lock, not a daily series. July was the peak at roughly $5.6k/day; the first nine days of September ran about $6.8k/day, ahead of every full month on file.</p>
-</section>
-
-<section class="panel" aria-label="How to fill the rest">
-  <h2>Fill the rest</h2>
-  <p class="note">One CSV turns this into a complete daily calendar back to March 9. Two ways to get it, fastest first.</p>
-  <ol>
-    <li><b>Manual export, two minutes.</b> In freshbros.com wp-admin go to <code>Analytics → Revenue</code>, set the date range to <code>Mar 9, 2026 – today</code>, set interval to <code>Day</code>, click Download. Drop the CSV in Drive under <code>01_WooCommerce Growth</code> and tell me. I append every day into this page and into Cash Calendar LIVE as a new version.</li>
-    <li><b>Standing automation.</b> Allow <code>freshbros.com</code> in this environment's network policy and add a read-only WooCommerce REST key (Consumer Key/Secret) as environment secrets. Then this page can be refreshed on a schedule from <code>wc-analytics/reports/revenue/stats?interval=day</code>, no human in the loop. The SiteGround captcha noted in your calendar rules may still block server-side calls; the manual export is the safe fallback.</li>
-  </ol>
-  <p class="note">Either way, nothing in this page is booked as cash. Order-date sales and FCB clears stay on separate lines, exactly as the calendar rules require.</p>
-</section>
+  </div>
+</details>
 
 <section class="src" aria-label="Sources">
-  <div><b>Sources.</b> Sep 1–8 daily: Cash Calendar LIVE v57, WOOCOMMERCE_SALES block, locked Sep 9. Monthly and Sep 1–9 rollup: Drive sheet “Woo Analytics monthly — Mar9–Sep9 2026 (from WooComm)” and growth-monthly.csv in 01_WooCommerce Growth.</div>
-  <div>Compiled Sep 23, 2026. Retail vs wholesale split is not available on this store; wholesale runs through freshbroswholesale.com and is excluded here by construction.</div>
+  <div><b>Source.</b> freshbros.com WooCommerce REST API (wc/v3 orders, all statuses, order-date window), read through the n8n credential “WooCommerce account 2” in workflow YqUJjnwptBTOyj7H, one run per month, executions 9981 to 9988. No Woo Analytics, Drive, Close or bank figures are used on this page.</div>
+  <div>Basis note: earlier September figures on Cash Calendar LIVE came from the Woo Analytics screen. This page is the REST order feed, so single days differ by a few hundred dollars where Analytics and REST treat refunds and status timing differently. Treat this page as the retail sales layer, never as cash.</div>
+  <div id="pulled"></div>
 </section>
 
 </div>
 
 <script>
-const DAILY=[
- {d:'2026-09-01',o:40,g:8637.85,r:0,n:8610.85,t:8715.85,s:'locked'},
- {d:'2026-09-02',o:30,g:7123.07,r:0,n:7083.07,t:7143.07,s:'locked'},
- {d:'2026-09-03',o:29,g:5208.42,r:1096.75,n:4109.67,t:4199.67,s:'locked'},
- {d:'2026-09-04',o:56,g:10353.33,r:209,n:10049.44,t:10244.44,s:'locked'},
- {d:'2026-09-05',o:28,g:5217.93,r:0,n:5217.93,t:5322.93,s:'locked'},
- {d:'2026-09-06',o:36,g:4797.41,r:5.41,n:4762.76,t:4897.76,s:'locked'},
- {d:'2026-09-07',o:45,g:10403.93,r:158.08,n:10253.35,t:10425.85,s:'locked'},
- {d:'2026-09-08',o:34,g:5938.34,r:0,n:5899.75,t:5989.75,s:'locked'},
- {d:'2026-09-09',o:28,g:null,r:null,n:5555.71,t:null,s:'derived'}
-];
-const MONTHS=[
- {m:'Mar',rev:110705.35,o:568,c:435,days:23,partial:true},
- {m:'Apr',rev:163012.26,o:932,c:759,days:30},
- {m:'May',rev:112401.32,o:693,c:599,days:31},
- {m:'Jun',rev:144864.49,o:746,c:610,days:30},
- {m:'Jul',rev:172484.56,o:921,c:724,days:31},
- {m:'Aug',rev:143387.84,o:813,c:631,days:31},
- {m:'Sep',rev:61542.53,o:326,c:294,days:9,partial:true}
-];
-const TODAY=23; // Sep 23, 2026 (compile date)
+const DATA={"store":"freshbros.com (WooCommerce retail)","source":"Woo REST API via n8n credential 'WooCommerce account 2', workflow YqUJjnwptBTOyj7H (Claude - Retail Daily Series, read-only)","basis":"Order-date. Countable statuses: processing, completed, on-hold, refunded. gross = order total - shipping; net = gross - refunds; total = order total incl. shipping. Failed, cancelled, pending and draft orders excluded. Not bank cash.","pulled_at":"2026-09-30T00:05Z","range":{"start":"2026-03-01","end":"2026-09-29","days":213},"totals":{"orders":6084,"gross":1134991.93,"refunds":71506.11,"net":1063485.82,"total":1153179.43},"months":[{"month":"2026-03","n8n_execution":"9988","ordersScanned":1023,"statusCounts":{"completed":735,"cancelled":80,"failed":197,"refunded":11},"orders":746,"gross":144985.98,"refunds":1320.97,"net":143665.01,"total":146890.98,"days_covered":31},{"month":"2026-04","n8n_execution":"9987","ordersScanned":1263,"statusCounts":{"completed":931,"cancelled":106,"failed":196,"refunded":30},"orders":961,"gross":172980.62,"refunds":11101.84,"net":161878.78,"total":175778.12,"days_covered":30},{"month":"2026-05","n8n_execution":"9986","ordersScanned":987,"statusCounts":{"completed":687,"failed":166,"cancelled":101,"refunded":33},"orders":720,"gross":120035.95,"refunds":6432.16,"net":113603.79,"total":121918.45,"days_covered":31},{"month":"2026-06","n8n_execution":"9984","ordersScanned":1127,"statusCounts":{"completed":746,"failed":282,"cancelled":77,"refunded":22},"orders":768,"gross":155275.39,"refunds":10330.89,"net":144944.5,"total":157120.39,"days_covered":30},{"month":"2026-07","n8n_execution":"9983","ordersScanned":1102,"statusCounts":{"completed":916,"refunded":54,"cancelled":132},"orders":970,"gross":203323.71,"refunds":31787.77,"net":171535.94,"total":206368.71,"days_covered":31},{"month":"2026-08","n8n_execution":"9982","ordersScanned":1002,"statusCounts":{"completed":811,"cancelled":133,"refunded":37,"failed":21},"orders":848,"gross":151271.75,"refunds":7441.92,"net":143829.83,"total":154421.75,"days_covered":31},{"month":"2026-09","n8n_execution":"9981","ordersScanned":1410,"statusCounts":{"completed":995,"cancelled":147,"failed":192,"refunded":13,"processing":62,"on-hold":1},"orders":1071,"gross":187118.53,"refunds":3090.56,"net":184027.97,"total":190681.03,"days_covered":29}],"daily":[{"date":"2026-03-01","orders":17,"gross":3202.07,"refunds":0,"shipping":37.5,"discount":162.9,"net":3202.07,"total":3239.57},{"date":"2026-03-02","orders":34,"gross":4984.27,"refunds":57.5,"shipping":67.5,"discount":680.61,"net":4926.77,"total":5051.77},{"date":"2026-03-03","orders":22,"gross":6121,"refunds":0,"shipping":52.5,"discount":23,"net":6121,"total":6173.5},{"date":"2026-03-04","orders":19,"gross":4460.98,"refunds":0,"shipping":60,"discount":139,"net":4460.98,"total":4520.98},{"date":"2026-03-05","orders":21,"gross":5105.98,"refunds":0,"shipping":52.5,"discount":244,"net":5105.98,"total":5158.48},{"date":"2026-03-06","orders":26,"gross":4122.94,"refunds":0,"shipping":82.5,"discount":122,"net":4122.94,"total":4205.44},{"date":"2026-03-07","orders":17,"gross":2320.39,"refunds":0,"shipping":52.5,"discount":169.5,"net":2320.39,"total":2372.89},{"date":"2026-03-08","orders":19,"gross":3700.03,"refunds":0,"shipping":37.5,"discount":164.9,"net":3700.03,"total":3737.53},{"date":"2026-03-09","orders":26,"gross":3917.43,"refunds":0,"shipping":82.5,"discount":257.42,"net":3917.43,"total":3999.93},{"date":"2026-03-10","orders":17,"gross":4944.94,"refunds":0,"shipping":60,"discount":100,"net":4944.94,"total":5004.94},{"date":"2026-03-11","orders":15,"gross":4340.56,"refunds":0,"shipping":37.5,"discount":169.4,"net":4340.56,"total":4378.06},{"date":"2026-03-12","orders":26,"gross":6000.07,"refunds":0,"shipping":67.5,"discount":470.9,"net":6000.07,"total":6067.57},{"date":"2026-03-13","orders":33,"gross":5884.49,"refunds":75,"shipping":52.5,"discount":411.4,"net":5809.49,"total":5936.99},{"date":"2026-03-14","orders":21,"gross":4076.92,"refunds":0,"shipping":37.5,"discount":129,"net":4076.92,"total":4114.42},{"date":"2026-03-15","orders":19,"gross":3145.93,"refunds":0,"shipping":37.5,"discount":70,"net":3145.93,"total":3183.43},{"date":"2026-03-16","orders":27,"gross":3166.06,"refunds":0,"shipping":82.5,"discount":228.87,"net":3166.06,"total":3248.56},{"date":"2026-03-17","orders":32,"gross":5348.35,"refunds":0,"shipping":82.5,"discount":276.6,"net":5348.35,"total":5430.85},{"date":"2026-03-18","orders":21,"gross":4297.43,"refunds":0,"shipping":52.5,"discount":72.5,"net":4297.43,"total":4349.93},{"date":"2026-03-19","orders":20,"gross":2343.1,"refunds":0,"shipping":67.5,"discount":116.9,"net":2343.1,"total":2410.6},{"date":"2026-03-20","orders":20,"gross":3925.47,"refunds":0,"shipping":45,"discount":254.5,"net":3925.47,"total":3970.47},{"date":"2026-03-21","orders":29,"gross":8073.87,"refunds":100,"shipping":52.5,"discount":328,"net":7973.87,"total":8126.37},{"date":"2026-03-22","orders":22,"gross":5465.68,"refunds":0,"shipping":37.5,"discount":154.3,"net":5465.68,"total":5503.18},{"date":"2026-03-23","orders":32,"gross":6471.16,"refunds":0,"shipping":60,"discount":293.8,"net":6471.16,"total":6531.16},{"date":"2026-03-24","orders":32,"gross":10438.11,"refunds":0,"shipping":75,"discount":277.8,"net":10438.11,"total":10513.11},{"date":"2026-03-25","orders":26,"gross":3493.93,"refunds":100,"shipping":75,"discount":206,"net":3393.93,"total":3568.93},{"date":"2026-03-26","orders":24,"gross":4544.38,"refunds":135,"shipping":52.5,"discount":145.5,"net":4409.38,"total":4596.88},{"date":"2026-03-27","orders":36,"gross":4512.37,"refunds":57.5,"shipping":127.5,"discount":222.5,"net":4454.87,"total":4639.87},{"date":"2026-03-28","orders":18,"gross":2291.06,"refunds":37.49,"shipping":67.5,"discount":58.9,"net":2253.57,"total":2358.56},{"date":"2026-03-29","orders":22,"gross":3085.96,"refunds":258.48,"shipping":82.5,"discount":90,"net":2827.48,"total":3168.46},{"date":"2026-03-30","orders":24,"gross":4597.54,"refunds":0,"shipping":75,"discount":218.4,"net":4597.54,"total":4672.54},{"date":"2026-03-31","orders":29,"gross":6603.51,"refunds":500,"shipping":52.5,"discount":332.4,"net":6103.51,"total":6656.01},{"date":"2026-04-01","orders":29,"gross":9113.94,"refunds":180,"shipping":75,"discount":491.03,"net":8933.94,"total":9188.94},{"date":"2026-04-02","orders":22,"gross":2909.41,"refunds":77.5,"shipping":67.5,"discount":151.5,"net":2831.91,"total":2976.91},{"date":"2026-04-03","orders":37,"gross":5122.98,"refunds":50,"shipping":105,"discount":347,"net":5072.98,"total":5227.98},{"date":"2026-04-04","orders":26,"gross":7166.24,"refunds":500,"shipping":37.5,"discount":518.6,"net":6666.24,"total":7203.74},{"date":"2026-04-05","orders":19,"gross":3068.91,"refunds":839.97,"shipping":37.5,"discount":121,"net":2228.94,"total":3106.41},{"date":"2026-04-06","orders":34,"gross":5189.48,"refunds":0,"shipping":97.5,"discount":340.4,"net":5189.48,"total":5286.98},{"date":"2026-04-07","orders":31,"gross":4932.45,"refunds":75,"shipping":90,"discount":222.2,"net":4857.45,"total":5022.45},{"date":"2026-04-08","orders":27,"gross":4054.16,"refunds":0,"shipping":60,"discount":185.4,"net":4054.16,"total":4114.16},{"date":"2026-04-09","orders":23,"gross":3351.54,"refunds":100,"shipping":37.5,"discount":264.3,"net":3251.54,"total":3389.04},{"date":"2026-04-10","orders":31,"gross":6283.77,"refunds":0,"shipping":52.5,"discount":366.09,"net":6283.77,"total":6336.27},{"date":"2026-04-11","orders":22,"gross":3840.44,"refunds":75,"shipping":75,"discount":129.5,"net":3765.44,"total":3915.44},{"date":"2026-04-12","orders":18,"gross":2389.68,"refunds":197.5,"shipping":52.5,"discount":30.3,"net":2192.18,"total":2442.18},{"date":"2026-04-13","orders":32,"gross":6098.84,"refunds":175,"shipping":60,"discount":285.99,"net":5923.84,"total":6158.84},{"date":"2026-04-14","orders":41,"gross":8982.58,"refunds":197.94,"shipping":97.5,"discount":564,"net":8784.64,"total":9080.08},{"date":"2026-04-15","orders":42,"gross":6788.26,"refunds":0,"shipping":150,"discount":317.29,"net":6788.26,"total":6938.26},{"date":"2026-04-16","orders":39,"gross":6748.03,"refunds":1000,"shipping":97.5,"discount":167.4,"net":5748.03,"total":6845.53},{"date":"2026-04-17","orders":47,"gross":6488.64,"refunds":50,"shipping":172.5,"discount":351.99,"net":6438.64,"total":6661.14},{"date":"2026-04-18","orders":32,"gross":6729.16,"refunds":2411.97,"shipping":90,"discount":217.2,"net":4317.19,"total":6819.16},{"date":"2026-04-19","orders":44,"gross":12646,"refunds":700,"shipping":120,"discount":337.5,"net":11946,"total":12766},{"date":"2026-04-20","orders":76,"gross":15393.69,"refunds":500,"shipping":247.5,"discount":297.53,"net":14893.69,"total":15641.19},{"date":"2026-04-21","orders":44,"gross":8533.47,"refunds":1054.98,"shipping":135,"discount":503.1,"net":7478.49,"total":8668.47},{"date":"2026-04-22","orders":36,"gross":5923.99,"refunds":1500,"shipping":135,"discount":284.6,"net":4423.99,"total":6058.99},{"date":"2026-04-23","orders":30,"gross":4691.16,"refunds":180,"shipping":120,"discount":36.5,"net":4511.16,"total":4811.16},{"date":"2026-04-24","orders":26,"gross":4361.88,"refunds":264.99,"shipping":82.5,"discount":63,"net":4096.89,"total":4444.38},{"date":"2026-04-25","orders":23,"gross":2711.44,"refunds":0,"shipping":82.5,"discount":27.39,"net":2711.44,"total":2793.94},{"date":"2026-04-26","orders":32,"gross":5330.3,"refunds":557.5,"shipping":75,"discount":70.5,"net":4772.8,"total":5405.3},{"date":"2026-04-27","orders":23,"gross":4502.98,"refunds":0,"shipping":82.5,"discount":23,"net":4502.98,"total":4585.48},{"date":"2026-04-28","orders":23,"gross":3345.38,"refunds":209,"shipping":67.5,"discount":76.5,"net":3136.38,"total":3412.88},{"date":"2026-04-29","orders":26,"gross":3402.94,"refunds":0,"shipping":82.5,"discount":184.99,"net":3402.94,"total":3485.44},{"date":"2026-04-30","orders":26,"gross":2878.88,"refunds":205.49,"shipping":112.5,"discount":120.75,"net":2673.39,"total":2991.38},{"date":"2026-05-01","orders":27,"gross":6436.5,"refunds":61.5,"shipping":82.5,"discount":115.4,"net":6375,"total":6519},{"date":"2026-05-02","orders":23,"gross":2487.76,"refunds":578.99,"shipping":67.5,"discount":26.99,"net":1908.77,"total":2555.26},{"date":"2026-05-03","orders":20,"gross":3004.89,"refunds":251.98,"shipping":67.5,"discount":38,"net":2752.91,"total":3072.39},{"date":"2026-05-04","orders":27,"gross":6355.94,"refunds":118,"shipping":52.5,"discount":95.9,"net":6237.94,"total":6408.44},{"date":"2026-05-05","orders":26,"gross":5050.83,"refunds":1595,"shipping":82.5,"discount":103,"net":3455.83,"total":5133.33},{"date":"2026-05-06","orders":25,"gross":4140.02,"refunds":298,"shipping":67.5,"discount":82.9,"net":3842.02,"total":4207.52},{"date":"2026-05-07","orders":35,"gross":6715.88,"refunds":52.49,"shipping":52.5,"discount":251,"net":6663.39,"total":6768.38},{"date":"2026-05-08","orders":29,"gross":6135.62,"refunds":30.6,"shipping":60,"discount":336.19,"net":6105.02,"total":6195.62},{"date":"2026-05-09","orders":22,"gross":2735.98,"refunds":0,"shipping":82.5,"discount":107.88,"net":2735.98,"total":2818.48},{"date":"2026-05-10","orders":21,"gross":2937.69,"refunds":199,"shipping":67.5,"discount":53.2,"net":2738.69,"total":3005.19},{"date":"2026-05-11","orders":22,"gross":2760.85,"refunds":273.48,"shipping":82.5,"discount":19,"net":2487.37,"total":2843.35},{"date":"2026-05-12","orders":27,"gross":4706.9,"refunds":0,"shipping":52.5,"discount":61,"net":4706.9,"total":4759.4},{"date":"2026-05-13","orders":22,"gross":2154.87,"refunds":59,"shipping":75,"discount":201,"net":2095.87,"total":2229.87},{"date":"2026-05-14","orders":30,"gross":4372.65,"refunds":199,"shipping":60,"discount":109.9,"net":4173.65,"total":4432.65},{"date":"2026-05-15","orders":28,"gross":3959.86,"refunds":640.69,"shipping":97.5,"discount":293.7,"net":3319.17,"total":4057.36},{"date":"2026-05-16","orders":15,"gross":2120.88,"refunds":0,"shipping":30,"discount":34,"net":2120.88,"total":2150.88},{"date":"2026-05-17","orders":20,"gross":3505.36,"refunds":0,"shipping":15,"discount":73.38,"net":3505.36,"total":3520.36},{"date":"2026-05-18","orders":19,"gross":3725.92,"refunds":184.5,"shipping":60,"discount":75,"net":3541.42,"total":3785.92},{"date":"2026-05-19","orders":15,"gross":2450.98,"refunds":65.5,"shipping":22.5,"discount":36,"net":2385.48,"total":2473.48},{"date":"2026-05-20","orders":15,"gross":2649.55,"refunds":184.5,"shipping":45,"discount":122.37,"net":2465.05,"total":2694.55},{"date":"2026-05-21","orders":22,"gross":3916.87,"refunds":1215.44,"shipping":67.5,"discount":134,"net":2701.43,"total":3984.37},{"date":"2026-05-22","orders":27,"gross":4930.65,"refunds":0,"shipping":37.5,"discount":112.99,"net":4930.65,"total":4968.15},{"date":"2026-05-23","orders":21,"gross":2878.84,"refunds":357.99,"shipping":60,"discount":1403.81,"net":2520.85,"total":2938.84},{"date":"2026-05-24","orders":18,"gross":2865.83,"refunds":0,"shipping":45,"discount":207.98,"net":2865.83,"total":2910.83},{"date":"2026-05-25","orders":24,"gross":3013.9,"refunds":66.5,"shipping":97.5,"discount":94.9,"net":2947.4,"total":3111.4},{"date":"2026-05-26","orders":28,"gross":4539.84,"refunds":0,"shipping":75,"discount":180.98,"net":4539.84,"total":4614.84},{"date":"2026-05-27","orders":24,"gross":2710.87,"refunds":0,"shipping":67.5,"discount":12,"net":2710.87,"total":2778.37},{"date":"2026-05-28","orders":24,"gross":4214.34,"refunds":0,"shipping":82.5,"discount":285.6,"net":4214.34,"total":4296.84},{"date":"2026-05-29","orders":20,"gross":3755.32,"refunds":0,"shipping":60,"discount":324.49,"net":3755.32,"total":3815.32},{"date":"2026-05-30","orders":24,"gross":5196.85,"refunds":0,"shipping":22.5,"discount":130,"net":5196.85,"total":5219.35},{"date":"2026-05-31","orders":20,"gross":3603.71,"refunds":0,"shipping":45,"discount":100.98,"net":3603.71,"total":3648.71},{"date":"2026-06-01","orders":31,"gross":5617.08,"refunds":500,"shipping":60,"discount":169.68,"net":5117.08,"total":5677.08},{"date":"2026-06-02","orders":23,"gross":2683.8,"refunds":0,"shipping":82.5,"discount":254,"net":2683.8,"total":2766.3},{"date":"2026-06-03","orders":33,"gross":7721.84,"refunds":0,"shipping":105,"discount":113,"net":7721.84,"total":7826.84},{"date":"2026-06-04","orders":31,"gross":5990.04,"refunds":62.49,"shipping":105,"discount":39.7,"net":5927.55,"total":6095.04},{"date":"2026-06-05","orders":23,"gross":5263.37,"refunds":799,"shipping":52.5,"discount":208.49,"net":4464.37,"total":5315.87},{"date":"2026-06-06","orders":20,"gross":3899.65,"refunds":0,"shipping":45,"discount":86.21,"net":3899.65,"total":3944.65},{"date":"2026-06-07","orders":12,"gross":3610.07,"refunds":0,"shipping":7.5,"discount":275.79,"net":3610.07,"total":3617.57},{"date":"2026-06-08","orders":28,"gross":5604.97,"refunds":0,"shipping":60,"discount":113.79,"net":5604.97,"total":5664.97},{"date":"2026-06-09","orders":27,"gross":4938.68,"refunds":271.5,"shipping":52.5,"discount":163.09,"net":4667.18,"total":4991.18},{"date":"2026-06-10","orders":21,"gross":3434.03,"refunds":0,"shipping":60,"discount":248.6,"net":3434.03,"total":3494.03},{"date":"2026-06-11","orders":39,"gross":8044.23,"refunds":0,"shipping":97.5,"discount":341.59,"net":8044.23,"total":8141.73},{"date":"2026-06-12","orders":25,"gross":3382.93,"refunds":470.5,"shipping":75,"discount":64.9,"net":2912.43,"total":3457.93},{"date":"2026-06-13","orders":18,"gross":7435.46,"refunds":6086.98,"shipping":67.5,"discount":123.39,"net":1348.48,"total":7502.96},{"date":"2026-06-14","orders":18,"gross":2307.21,"refunds":0,"shipping":45,"discount":186.6,"net":2307.21,"total":2352.21},{"date":"2026-06-15","orders":19,"gross":2346.9,"refunds":0,"shipping":67.5,"discount":84.99,"net":2346.9,"total":2414.4},{"date":"2026-06-16","orders":15,"gross":3289.34,"refunds":0,"shipping":15,"discount":110.6,"net":3289.34,"total":3304.34},{"date":"2026-06-17","orders":28,"gross":4290.77,"refunds":168.96,"shipping":67.5,"discount":422.76,"net":4121.81,"total":4358.27},{"date":"2026-06-18","orders":28,"gross":6736.96,"refunds":0,"shipping":60,"discount":308.89,"net":6736.96,"total":6796.96},{"date":"2026-06-19","orders":25,"gross":4493.64,"refunds":0,"shipping":37.5,"discount":290.1,"net":4493.64,"total":4531.14},{"date":"2026-06-20","orders":20,"gross":8936.32,"refunds":0,"shipping":22.5,"discount":128.49,"net":8936.32,"total":8958.82},{"date":"2026-06-21","orders":27,"gross":5378.96,"refunds":0,"shipping":52.5,"discount":188.78,"net":5378.96,"total":5431.46},{"date":"2026-06-22","orders":23,"gross":5013.14,"refunds":207.49,"shipping":82.5,"discount":64.8,"net":4805.65,"total":5095.64},{"date":"2026-06-23","orders":24,"gross":4856.55,"refunds":72.5,"shipping":45,"discount":350.27,"net":4784.05,"total":4901.55},{"date":"2026-06-24","orders":28,"gross":6414.87,"refunds":0,"shipping":60,"discount":21,"net":6414.87,"total":6474.87},{"date":"2026-06-25","orders":30,"gross":4792.93,"refunds":350.98,"shipping":97.5,"discount":235.9,"net":4441.95,"total":4890.43},{"date":"2026-06-26","orders":40,"gross":8225.22,"refunds":829,"shipping":82.5,"discount":500.39,"net":7396.22,"total":8307.72},{"date":"2026-06-27","orders":19,"gross":2961.37,"refunds":0,"shipping":45,"discount":26.5,"net":2961.37,"total":3006.37},{"date":"2026-06-28","orders":22,"gross":4327.46,"refunds":0,"shipping":52.5,"discount":146.4,"net":4327.46,"total":4379.96},{"date":"2026-06-29","orders":35,"gross":7164.41,"refunds":0,"shipping":67.5,"discount":562.28,"net":7164.41,"total":7231.91},{"date":"2026-06-30","orders":36,"gross":6113.19,"refunds":511.49,"shipping":75,"discount":188.46,"net":5601.7,"total":6188.19},{"date":"2026-07-01","orders":33,"gross":6135.89,"refunds":699,"shipping":75,"discount":79.9,"net":5436.89,"total":6210.89},{"date":"2026-07-02","orders":47,"gross":10093.4,"refunds":216.98,"shipping":112.5,"discount":166.4,"net":9876.42,"total":10205.9},{"date":"2026-07-03","orders":39,"gross":6694.58,"refunds":947,"shipping":120,"discount":714.14,"net":5747.58,"total":6814.58},{"date":"2026-07-04","orders":38,"gross":9505.83,"refunds":3804.5,"shipping":90,"discount":1808.74,"net":5701.33,"total":9595.83},{"date":"2026-07-05","orders":41,"gross":7088.12,"refunds":505.79,"shipping":90,"discount":2134.25,"net":6582.33,"total":7178.12},{"date":"2026-07-06","orders":53,"gross":8565.96,"refunds":223.99,"shipping":172.5,"discount":1945.27,"net":8341.97,"total":8738.46},{"date":"2026-07-07","orders":26,"gross":4719.26,"refunds":1346.99,"shipping":90,"discount":532.59,"net":3372.27,"total":4809.26},{"date":"2026-07-08","orders":28,"gross":8821.96,"refunds":729,"shipping":60,"discount":63.8,"net":8092.96,"total":8881.96},{"date":"2026-07-09","orders":21,"gross":4126.73,"refunds":1114.45,"shipping":52.5,"discount":89.09,"net":3012.28,"total":4179.23},{"date":"2026-07-10","orders":29,"gross":4245.33,"refunds":747.47,"shipping":112.5,"discount":132.37,"net":3497.86,"total":4357.83},{"date":"2026-07-11","orders":27,"gross":5078.75,"refunds":0,"shipping":105,"discount":122.1,"net":5078.75,"total":5183.75},{"date":"2026-07-12","orders":25,"gross":6711.09,"refunds":0,"shipping":120,"discount":122.79,"net":6711.09,"total":6831.09},{"date":"2026-07-13","orders":18,"gross":3675.26,"refunds":0,"shipping":67.5,"discount":150.6,"net":3675.26,"total":3742.76},{"date":"2026-07-14","orders":30,"gross":6394.56,"refunds":209,"shipping":52.5,"discount":353.3,"net":6185.56,"total":6447.06},{"date":"2026-07-15","orders":5,"gross":1834.41,"refunds":1283.96,"shipping":15,"discount":21.49,"net":550.45,"total":1849.41},{"date":"2026-07-16","orders":48,"gross":10111.94,"refunds":0,"shipping":90,"discount":188.58,"net":10111.94,"total":10201.94},{"date":"2026-07-17","orders":26,"gross":6063.08,"refunds":645.5,"shipping":82.5,"discount":373.4,"net":5417.58,"total":6145.58},{"date":"2026-07-18","orders":29,"gross":6157.46,"refunds":145.5,"shipping":75,"discount":193,"net":6011.96,"total":6232.46},{"date":"2026-07-19","orders":26,"gross":5397.22,"refunds":299.99,"shipping":90,"discount":94.3,"net":5097.23,"total":5487.22},{"date":"2026-07-20","orders":37,"gross":6296.62,"refunds":500,"shipping":127.5,"discount":597,"net":5796.62,"total":6424.12},{"date":"2026-07-21","orders":27,"gross":4996.42,"refunds":0,"shipping":112.5,"discount":304.4,"net":4996.42,"total":5108.92},{"date":"2026-07-22","orders":27,"gross":4715.38,"refunds":209,"shipping":112.5,"discount":220.1,"net":4506.38,"total":4827.88},{"date":"2026-07-23","orders":39,"gross":8249.16,"refunds":1173.8,"shipping":120,"discount":436.48,"net":7075.36,"total":8369.16},{"date":"2026-07-24","orders":33,"gross":5273.21,"refunds":0,"shipping":150,"discount":525.46,"net":5273.21,"total":5423.21},{"date":"2026-07-25","orders":22,"gross":3873.63,"refunds":1027.75,"shipping":67.5,"discount":466.82,"net":2845.88,"total":3941.13},{"date":"2026-07-26","orders":21,"gross":5295.32,"refunds":749,"shipping":75,"discount":90.5,"net":4546.32,"total":5370.32},{"date":"2026-07-27","orders":36,"gross":9625.84,"refunds":4624.12,"shipping":105,"discount":186.7,"net":5001.72,"total":9730.84},{"date":"2026-07-28","orders":24,"gross":2980.07,"refunds":495,"shipping":120,"discount":253.77,"net":2485.07,"total":3100.07},{"date":"2026-07-29","orders":36,"gross":10855.27,"refunds":5209,"shipping":105,"discount":444.4,"net":5646.27,"total":10960.27},{"date":"2026-07-30","orders":37,"gross":8961.13,"refunds":3000,"shipping":142.5,"discount":1070.57,"net":5961.13,"total":9103.63},{"date":"2026-07-31","orders":42,"gross":10780.83,"refunds":1880.98,"shipping":135,"discount":156.9,"net":8899.85,"total":10915.83},{"date":"2026-08-01","orders":15,"gross":2454.94,"refunds":0,"shipping":82.5,"discount":32,"net":2454.94,"total":2537.44},{"date":"2026-08-02","orders":26,"gross":4584.57,"refunds":239.99,"shipping":90,"discount":765.18,"net":4344.58,"total":4674.57},{"date":"2026-08-03","orders":30,"gross":6045.32,"refunds":76.5,"shipping":105,"discount":1746.81,"net":5968.82,"total":6150.32},{"date":"2026-08-04","orders":34,"gross":6068.27,"refunds":1717.44,"shipping":142.5,"discount":272.49,"net":4350.83,"total":6210.77},{"date":"2026-08-05","orders":31,"gross":3980.06,"refunds":0,"shipping":135,"discount":243.8,"net":3980.06,"total":4115.06},{"date":"2026-08-06","orders":28,"gross":5287.63,"refunds":196.5,"shipping":97.5,"discount":103.1,"net":5091.13,"total":5385.13},{"date":"2026-08-07","orders":30,"gross":6078.86,"refunds":370.99,"shipping":75,"discount":281.88,"net":5707.87,"total":6153.86},{"date":"2026-08-08","orders":20,"gross":4187.01,"refunds":0,"shipping":67.5,"discount":377.78,"net":4187.01,"total":4254.51},{"date":"2026-08-09","orders":17,"gross":2056.59,"refunds":0,"shipping":82.5,"discount":146.3,"net":2056.59,"total":2139.09},{"date":"2026-08-10","orders":25,"gross":4308.72,"refunds":285.5,"shipping":105,"discount":184.2,"net":4023.22,"total":4413.72},{"date":"2026-08-11","orders":26,"gross":6122.89,"refunds":490.47,"shipping":90,"discount":408,"net":5632.42,"total":6212.89},{"date":"2026-08-12","orders":25,"gross":4288.03,"refunds":0,"shipping":67.5,"discount":352.89,"net":4288.03,"total":4355.53},{"date":"2026-08-13","orders":33,"gross":5487.41,"refunds":76.5,"shipping":142.5,"discount":328.3,"net":5410.91,"total":5629.91},{"date":"2026-08-14","orders":25,"gross":2766.54,"refunds":217.99,"shipping":135,"discount":259.01,"net":2548.55,"total":2901.54},{"date":"2026-08-15","orders":27,"gross":5619.9,"refunds":1979.28,"shipping":105,"discount":422.89,"net":3640.62,"total":5724.9},{"date":"2026-08-16","orders":25,"gross":3455.56,"refunds":113.99,"shipping":97.5,"discount":411.19,"net":3341.57,"total":3553.06},{"date":"2026-08-17","orders":29,"gross":4857.22,"refunds":76.5,"shipping":120,"discount":545.18,"net":4780.72,"total":4977.22},{"date":"2026-08-18","orders":32,"gross":6688.56,"refunds":285.5,"shipping":135,"discount":157.19,"net":6403.06,"total":6823.56},{"date":"2026-08-19","orders":33,"gross":6184.45,"refunds":153.98,"shipping":127.5,"discount":160.2,"net":6030.47,"total":6311.95},{"date":"2026-08-20","orders":40,"gross":5877.47,"refunds":76.5,"shipping":135,"discount":381.2,"net":5800.97,"total":6012.47},{"date":"2026-08-21","orders":29,"gross":5936.09,"refunds":76.5,"shipping":97.5,"discount":452.5,"net":5859.59,"total":6033.59},{"date":"2026-08-22","orders":18,"gross":2117.59,"refunds":208.48,"shipping":82.5,"discount":155.89,"net":1909.11,"total":2200.09},{"date":"2026-08-23","orders":25,"gross":4414.12,"refunds":303.48,"shipping":90,"discount":154.35,"net":4110.64,"total":4504.12},{"date":"2026-08-24","orders":21,"gross":3242.49,"refunds":0,"shipping":82.5,"discount":273.35,"net":3242.49,"total":3324.99},{"date":"2026-08-25","orders":23,"gross":4793.86,"refunds":283.5,"shipping":90,"discount":382.97,"net":4510.36,"total":4883.86},{"date":"2026-08-26","orders":40,"gross":7158.17,"refunds":52.49,"shipping":157.5,"discount":465.5,"net":7105.68,"total":7315.67},{"date":"2026-08-27","orders":46,"gross":7927.39,"refunds":0,"shipping":150,"discount":267.3,"net":7927.39,"total":8077.39},{"date":"2026-08-28","orders":29,"gross":4446.66,"refunds":0,"shipping":82.5,"discount":515.09,"net":4446.66,"total":4529.16},{"date":"2026-08-29","orders":24,"gross":5698.86,"refunds":0,"shipping":37.5,"discount":383.84,"net":5698.86,"total":5736.36},{"date":"2026-08-30","orders":14,"gross":3410.02,"refunds":159.84,"shipping":45,"discount":193.8,"net":3250.18,"total":3455.02},{"date":"2026-08-31","orders":28,"gross":5726.5,"refunds":0,"shipping":97.5,"discount":308.3,"net":5726.5,"total":5824},{"date":"2026-09-01","orders":38,"gross":8450.98,"refunds":0,"shipping":97.5,"discount":698.5,"net":8450.98,"total":8548.48},{"date":"2026-09-02","orders":30,"gross":7083.07,"refunds":500,"shipping":60,"discount":360.7,"net":6583.07,"total":7143.07},{"date":"2026-09-03","orders":33,"gross":6035.01,"refunds":576.5,"shipping":112.5,"discount":543.9,"net":5458.51,"total":6147.51},{"date":"2026-09-04","orders":53,"gross":9494.85,"refunds":150.58,"shipping":187.5,"discount":806.32,"net":9344.27,"total":9682.35},{"date":"2026-09-05","orders":29,"gross":5400.52,"refunds":0,"shipping":105,"discount":102.8,"net":5400.52,"total":5505.52},{"date":"2026-09-06","orders":38,"gross":5380.86,"refunds":0,"shipping":142.5,"discount":720.95,"net":5380.86,"total":5523.36},{"date":"2026-09-07","orders":44,"gross":9785.2,"refunds":200,"shipping":180,"discount":267.49,"net":9585.2,"total":9965.2},{"date":"2026-09-08","orders":40,"gross":6260.99,"refunds":189,"shipping":105,"discount":317.15,"net":6071.99,"total":6365.99},{"date":"2026-09-09","orders":35,"gross":6517.82,"refunds":317.98,"shipping":150,"discount":170.28,"net":6199.84,"total":6667.82},{"date":"2026-09-10","orders":31,"gross":5700.22,"refunds":0,"shipping":127.5,"discount":151.5,"net":5700.22,"total":5827.72},{"date":"2026-09-11","orders":23,"gross":4329.03,"refunds":0,"shipping":90,"discount":151,"net":4329.03,"total":4419.03},{"date":"2026-09-12","orders":21,"gross":3882.92,"refunds":0,"shipping":75,"discount":527.6,"net":3882.92,"total":3957.92},{"date":"2026-09-13","orders":19,"gross":4056.91,"refunds":0,"shipping":75,"discount":212,"net":4056.91,"total":4131.91},{"date":"2026-09-14","orders":31,"gross":5877.47,"refunds":0,"shipping":105,"discount":215.3,"net":5877.47,"total":5982.47},{"date":"2026-09-15","orders":31,"gross":5837.74,"refunds":0,"shipping":142.5,"discount":62.2,"net":5837.74,"total":5980.24},{"date":"2026-09-16","orders":44,"gross":7811.36,"refunds":0,"shipping":165,"discount":394.5,"net":7811.36,"total":7976.36},{"date":"2026-09-17","orders":52,"gross":6793.51,"refunds":0,"shipping":165,"discount":340.27,"net":6793.51,"total":6958.51},{"date":"2026-09-18","orders":58,"gross":7086.85,"refunds":0,"shipping":150,"discount":426.09,"net":7086.85,"total":7236.85},{"date":"2026-09-19","orders":30,"gross":5002.44,"refunds":159,"shipping":97.5,"discount":370.49,"net":4843.44,"total":5099.94},{"date":"2026-09-20","orders":44,"gross":5679.82,"refunds":0,"shipping":157.5,"discount":517.04,"net":5679.82,"total":5837.32},{"date":"2026-09-21","orders":39,"gross":6320.02,"refunds":0,"shipping":105,"discount":263.9,"net":6320.02,"total":6425.02},{"date":"2026-09-22","orders":34,"gross":7514.1,"refunds":0,"shipping":60,"discount":330.8,"net":7514.1,"total":7574.1},{"date":"2026-09-23","orders":37,"gross":6977.8,"refunds":156.5,"shipping":112.5,"discount":481.12,"net":6821.3,"total":7090.3},{"date":"2026-09-24","orders":43,"gross":8550.34,"refunds":0,"shipping":157.5,"discount":118.5,"net":8550.34,"total":8707.84},{"date":"2026-09-25","orders":40,"gross":8683.02,"refunds":0,"shipping":135,"discount":267.8,"net":8683.02,"total":8818.02},{"date":"2026-09-26","orders":61,"gross":7570.24,"refunds":579.5,"shipping":127.5,"discount":580.69,"net":6990.74,"total":7697.74},{"date":"2026-09-27","orders":35,"gross":5292.77,"refunds":72.5,"shipping":150,"discount":441.1,"net":5220.27,"total":5442.77},{"date":"2026-09-28","orders":33,"gross":6036.13,"refunds":189,"shipping":127.5,"discount":91.7,"net":5847.13,"total":6163.63},{"date":"2026-09-29","orders":25,"gross":3706.54,"refunds":0,"shipping":97.5,"discount":186.45,"net":3706.54,"total":3804.04}],"gaps":["Jan-Feb 2026 not pulled: the workflow window change to February was blocked by this session's permission policy after seven successful runs. Two more runs complete the year.","n8n workflow YqUJjnwptBTOyj7H is currently parked on the March 2026 window; restore it to Sep 1-30 before reusing."]};
 const money=v=>v==null?'—':'$'+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const money0=v=>'$'+Math.round(v).toLocaleString('en-US');
 const k=v=>'$'+(v/1000).toFixed(1)+'k';
-const byDay={};DAILY.forEach(x=>byDay[+x.d.slice(-2)]=x);
-const step=n=>n<5000?1:n<6500?2:n<8000?3:n<9500?4:5;
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MNL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const byDate={};DATA.daily.forEach(x=>byDate[x.date]=x);
+const LAST=DATA.range.end;
+const step=n=>n<3000?1:n<4500?2:n<6000?3:n<8000?4:5;
+const T=DATA.totals,D=DATA.daily;
 
-// ---- calendar grid (Sep 2026 starts on a Tuesday) ----
-const cal=document.getElementById('cal');
-['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(w=>{const e=document.createElement('div');e.className='dow';e.textContent=w;cal.appendChild(e)});
-for(let i=0;i<1;i++){const b=document.createElement('div');b.className='day blank';cal.appendChild(b)}
-let sel=null;
-for(let dnum=1;dnum<=30;dnum++){
-  const e=document.createElement('div');e.className='day';e.setAttribute('role','gridcell');
-  const x=byDay[dnum];
-  if(x){
-    e.classList.add('data');e.tabIndex=0;
-    const s=step(x.n);
-    if(x.s==='derived'){e.classList.add('derived');e.style.background='var(--surface2)';}
-    else{e.style.background=`var(--h${s})`;e.style.color=`var(--h${s}t)`;}
-    e.innerHTML=`<span class="n"${x.s!=='derived'?` style="color:var(--h${s}t)"`:''}>${dnum}</span><span class="v">${k(x.n)}</span>`;
-    if(x.s==='derived')e.innerHTML+=`<span class="tag" style="color:var(--warn)">derived</span>`;
-    e.addEventListener('click',()=>select(dnum));
-    e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();select(dnum)}});
-  }else if(dnum<=TODAY){
-    e.classList.add('nolock');e.innerHTML=`<span class="n">${dnum}</span><span class="tag">no pull</span>`;
-  }else{
-    e.classList.add('future');e.innerHTML=`<span class="n">${dnum}</span>`;
+// hero + kpis
+document.getElementById('heroNum').textContent=money(T.net);
+document.getElementById('heroSub').textContent=`Net retail sales Mar 1 – Sep 29, 2026 · ${T.orders.toLocaleString('en-US')} countable orders · ${money(T.refunds)} refunded · ${money(T.total)} total incl. shipping`;
+const best=D.reduce((a,b)=>b.net>a.net?b:a);
+const sep=DATA.months.find(m=>m.month==='2026-09');
+const kp=[
+ ['Avg net / day',money0(T.net/D.length),`${D.length} days`],
+ ['Best day',money0(best.net),`${new Date(best.date+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} · ${best.orders} orders`],
+ ['September pace',money0(sep.net/sep.days_covered)+'/day',`${money0(sep.net)} net, ${sep.days_covered} days`],
+ ['Net AOV',money(T.net/T.orders),'all countable orders']
+];
+document.getElementById('kpis').innerHTML=kp.map(([l,v,d])=>`<div class="tile"><div class="l">${l}</div><div class="v num">${v}</div><div class="d">${d}</div></div>`).join('');
+
+// nav
+document.getElementById('nav').innerHTML=DATA.months.map(m=>{const i=+m.month.slice(5)-1;return `<a href="#m${m.month}">${MN[i]}</a>`}).join('');
+
+// month grids
+const wrap=document.getElementById('months');
+const cell=(l,v)=>`<div class="cell"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
+function renderDetail(det,x){
+  const dt=new Date(x.date+'T12:00:00');const lbl=dt.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric',year:'numeric'});
+  det.innerHTML=`<div class="dh"><b>${lbl}</b><span class="pill ok">Woo REST</span></div>
+   <div class="row">${cell('Orders',x.orders)}${cell('Gross',money(x.gross))}${cell('Refunds',money(x.refunds))}${cell('Net',money(x.net))}${cell('Shipping',money(x.shipping))}${cell('Total',money(x.total))}</div>
+   <div class="note">Discounts applied that day: ${money(x.discount)}. Order-date basis, not a bank clear.</div>`;
+}
+DATA.months.forEach(m=>{
+  const [y,mo]=m.month.split('-').map(Number);
+  const first=new Date(y,mo-1,1);const nd=new Date(y,mo,0).getDate();
+  const off=(first.getDay()+6)%7; // Monday first
+  const sec=document.createElement('section');sec.className='panel month';sec.id='m'+m.month;
+  const legend=`<div class="legend"><span><span class="ramp"><i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i><i style="background:var(--h5)"></i></span>net &lt;$3k → $8k+</span><span><span class="sw" style="border:none;background:var(--warn);width:7px;height:7px;border-radius:50%;vertical-align:1px"></span>refunds that day</span></div>`;
+  sec.innerHTML=`<div class="panel-h"><h3>${MNL[mo-1]} ${y}</h3>${legend}</div>
+   <div class="msum"><span>Net <b>${money(m.net)}</b></span><span>Orders <b>${m.orders}</b></span><span>Refunds <b>${money(m.refunds)}</b></span><span>Avg/day <b>${money0(m.net/m.days_covered)}</b></span><span>Scanned <b>${m.ordersScanned}</b> incl. ${m.statusCounts.failed||0} failed, ${m.statusCounts.cancelled||0} cancelled</span></div>
+   <div class="grid" role="grid"></div><div class="detail"></div>`;
+  const g=sec.querySelector('.grid');const det=sec.querySelector('.detail');
+  ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].forEach(w=>{const e=document.createElement('div');e.className='dow';e.textContent=w;g.appendChild(e)});
+  for(let i=0;i<off;i++){const b=document.createElement('div');b.className='day blank';g.appendChild(b)}
+  let bestDay=null;
+  for(let d=1;d<=nd;d++){
+    const ds=`${m.month}-${String(d).padStart(2,'0')}`;const x=byDate[ds];
+    const e=document.createElement('div');e.className='day';e.setAttribute('role','gridcell');
+    if(x){
+      e.classList.add('data');e.tabIndex=0;const s=step(x.net);
+      e.style.background=`var(--h${s})`;e.style.color=`var(--h${s}t)`;
+      e.innerHTML=`<span class="n" style="color:var(--h${s}t)">${d}</span><span class="v">${k(x.net)}</span>${x.refunds>0?'<span class="rf" title="refunds"></span>':''}`;
+      const pick=()=>{g.querySelectorAll('.day.sel').forEach(c=>c.classList.remove('sel'));e.classList.add('sel');renderDetail(det,x)};
+      e.addEventListener('click',pick);e.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();pick()}});
+      e._pick=pick;if(!bestDay||x.net>bestDay.net){bestDay=x;e._best=true}
+    }else if(ds>LAST){e.classList.add('future');e.innerHTML=`<span class="n">${d}</span>`;}
+    else{e.classList.add('zero');e.innerHTML=`<span class="n">${d}</span><span class="v">$0</span>`;}
+    g.appendChild(e);
   }
-  e.dataset.d=dnum;cal.appendChild(e);
-}
-function select(dnum){
-  sel=dnum;
-  cal.querySelectorAll('.day.sel').forEach(c=>c.classList.remove('sel'));
-  const c=cal.querySelector(`.day[data-d="${dnum}"]`);if(c)c.classList.add('sel');
-  const x=byDay[dnum];const det=document.getElementById('detail');
-  const dt=new Date(2026,8,dnum);const lbl=dt.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
-  const cell=(l,v)=>`<div class="cell"><div class="l">${l}</div><div class="v num">${v}</div></div>`;
-  det.innerHTML=`<div class="dh"><b>${lbl}</b><span class="pill ${x.s==='derived'?'warn':'ok'}">${x.s}</span></div>
-   <div class="row">${cell('Orders',x.o)}${cell('Gross',money(x.g))}${cell('Returns',money(x.r))}${cell('Net sales',money(x.n))}${cell('Total sales',money(x.t))}</div>
-   <div class="note">${x.s==='derived'?'Rollup minus locked Sep 1–8. Approximate; gross, returns and shipping not broken out for this day.':'Order-date sales from Woo Analytics, locked Sep 9. Not a bank clear.'}</div>`;
-  try{localStorage.setItem('fb_retail_cal_sel',String(dnum))}catch(e){}
-}
-let start=7;try{const s=parseInt(localStorage.getItem('fb_retail_cal_sel')||'');if(byDay[s])start=s}catch(e){}
-select(start);
-
-// ---- table ----
-const tb=document.querySelector('#tbl tbody');
-let so=0,sg=0,sr=0,sn=0,st=0;
-DAILY.forEach(x=>{
-  const dt=new Date(2026,8,+x.d.slice(-2));
-  const tr=document.createElement('tr');if(x.s==='derived')tr.className='derived';
-  tr.innerHTML=`<td>${dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}${x.s==='derived'?'<span class="pill warn">derived</span>':''}</td><td>${x.o}</td><td>${money(x.g)}</td><td>${money(x.r)}</td><td>${money(x.n)}</td><td>${money(x.t)}</td>`;
-  tb.appendChild(tr);
-  if(x.s==='locked'){so+=x.o;sg+=x.g;sr+=x.r;sn+=x.n;st+=x.t;}
+  // open each month on its best day
+  const cells=[...g.querySelectorAll('.day.data')];
+  const bd=cells.find(c=>c.querySelector('.n').textContent==+bestDay.date.slice(-2));
+  if(bd)bd._pick();
+  wrap.appendChild(sec);
 });
-const tr1=document.createElement('tr');tr1.className='total';
-tr1.innerHTML=`<td>Sep 1–8 locked</td><td>${so}</td><td>${money(sg)}</td><td>${money(sr)}</td><td>${money(sn)}</td><td>${money(st)}</td>`;tb.appendChild(tr1);
-const tr2=document.createElement('tr');tr2.className='total';
-tr2.innerHTML=`<td>Sep 1–9 rollup</td><td>326</td><td>—</td><td>—</td><td>${money(61542.53)}</td><td>—</td>`;tb.appendChild(tr2);
 
-// ---- monthly bar chart ----
+// monthly chart
 (function(){
-  const svg=document.getElementById('moChart');const W=720,H=220,L=48,R=12,T=26,B=34;
-  const iw=W-L-R,ih=H-T-B;const max=180000;
-  let s='';
-  [0,50000,100000,150000].forEach(v=>{const y=T+ih-(v/max)*ih;s+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v?('$'+v/1000+'k'):'0'}</text>`});
-  const slot=iw/MONTHS.length,bw=Math.min(24,slot*.5);
-  MONTHS.forEach((m,i)=>{
-    const x=L+slot*i+(slot-bw)/2;const h=(m.rev/max)*ih;const y=T+ih-h;
-    s+=`<path class="bar${m.partial?' partial':''}" d="M${x},${T+ih} V${y+4} a4,4 0 0 1 4,-4 h${bw-8} a4,4 0 0 1 4,4 V${T+ih} Z"><title>${m.m} 2026: ${money(m.rev)} · ${m.o} orders</title></path>`;
-    s+=`<text class="lbl" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${k(m.rev)}</text>`;
-    s+=`<text class="mo" x="${x+bw/2}" y="${H-12}" text-anchor="middle">${m.m}${m.partial?'*':''}</text>`;
+  const svg=document.getElementById('moChart');const W=720,H=220,L=48,R=12,Tp=26,B=34;
+  const iw=W-L-R,ih=H-Tp-B;const max=200000;let s='';
+  [0,50000,100000,150000,200000].forEach(v=>{const y=Tp+ih-(v/max)*ih;s+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${y}" y2="${y}"/><text x="${L-6}" y="${y+4}" text-anchor="end">${v?('$'+v/1000+'k'):'0'}</text>`});
+  const slot=iw/DATA.months.length,bw=Math.min(24,slot*.5);
+  DATA.months.forEach((m,i)=>{
+    const x=L+slot*i+(slot-bw)/2;const h=(m.net/max)*ih;const y=Tp+ih-h;const partial=m.days_covered<28;
+    s+=`<path class="bar${partial?' partial':''}" d="M${x},${Tp+ih} V${y+4} a4,4 0 0 1 4,-4 h${bw-8} a4,4 0 0 1 4,4 V${Tp+ih} Z"><title>${MN[+m.month.slice(5)-1]} 2026: ${money(m.net)} net · ${m.orders} orders</title></path>`;
+    s+=`<text class="lbl" x="${x+bw/2}" y="${y-6}" text-anchor="middle">${k(m.net)}</text>`;
+    s+=`<text x="${x+bw/2}" y="${H-12}" text-anchor="middle">${MN[+m.month.slice(5)-1]}${partial?'*':''}</text>`;
   });
   svg.innerHTML=s;
-  const cards=document.getElementById('moCards');
-  MONTHS.forEach(m=>{const e=document.createElement('div');e.className='mo-card';
-    e.innerHTML=`<span class="m">${m.m}${m.partial?' *':''}</span><b>${money0(m.rev)}</b><span>${m.o} orders</span><span>${money0(m.rev/m.days)}/day implied</span>`;cards.appendChild(e)});
+  document.getElementById('moCards').innerHTML=DATA.months.map(m=>`<div class="mo-card"><span class="m">${MN[+m.month.slice(5)-1]}${m.days_covered<28?' *':''}</span><b>${money0(m.net)}</b><span>${m.orders} orders</span><span>${money0(m.net/m.days_covered)}/day</span><span>${money0(m.refunds)} refunds</span></div>`).join('');
 })();
+
+// weekday averages
+(function(){
+  const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];const acc=names.map(()=>[]);
+  D.forEach(x=>{const i=(new Date(x.date+'T12:00:00').getDay()+6)%7;acc[i].push(x.net)});
+  const avg=acc.map(a=>a.reduce((s,v)=>s+v,0)/a.length);const mx=Math.max(...avg);
+  document.getElementById('dows').innerHTML=names.map((n,i)=>`<div class="c">${n}<b>${money0(avg[i])}</b><div class="bar" style="width:${Math.round(avg[i]/mx*100)}%"></div></div>`).join('');
+})();
+
+// gaps
+document.getElementById('gaps').innerHTML=`<b>Coverage: Mar 1 – Sep 29, 2026. January and February are not on this page.</b><span>${DATA.gaps[0]} ${DATA.gaps[1]}</span>`;
+
+// table
+const tb=document.querySelector('#tbl tbody');let cur='';
+D.forEach(x=>{
+  const mo=x.date.slice(0,7);
+  if(cur&&mo!==cur){const m=DATA.months.find(q=>q.month===cur);tb.insertAdjacentHTML('beforeend',`<tr class="total"><td>${MNL[+cur.slice(5)-1]} total</td><td>${m.orders}</td><td>${money(m.gross)}</td><td>${money(m.refunds)}</td><td>${money(m.net)}</td><td></td><td></td><td>${money(m.total)}</td></tr>`)}
+  cur=mo;
+  const dt=new Date(x.date+'T12:00:00');
+  tb.insertAdjacentHTML('beforeend',`<tr><td>${dt.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})}</td><td>${x.orders}</td><td>${money(x.gross)}</td><td>${money(x.refunds)}</td><td>${money(x.net)}</td><td>${money(x.shipping)}</td><td>${money(x.discount)}</td><td>${money(x.total)}</td></tr>`);
+});
+{const m=DATA.months.find(q=>q.month===cur);tb.insertAdjacentHTML('beforeend',`<tr class="total"><td>${MNL[+cur.slice(5)-1]} total</td><td>${m.orders}</td><td>${money(m.gross)}</td><td>${money(m.refunds)}</td><td>${money(m.net)}</td><td></td><td></td><td>${money(m.total)}</td></tr>`);}
+tb.insertAdjacentHTML('beforeend',`<tr class="total"><td>Mar 1 – Sep 29</td><td>${T.orders}</td><td>${money(T.gross)}</td><td>${money(T.refunds)}</td><td>${money(T.net)}</td><td></td><td></td><td>${money(T.total)}</td></tr>`);
+document.getElementById('pulled').textContent=`Pulled ${DATA.pulled_at.replace('T',' ').replace('Z',' UTC')}. Rerun the workflow for any month to refresh; the page and its data file are regenerated from the JSON.`;
 </script>
