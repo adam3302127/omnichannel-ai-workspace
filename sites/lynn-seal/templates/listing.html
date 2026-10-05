@@ -20,7 +20,7 @@
         <source type="image/webp" data-srcset="{{root}}assets/listings/{{slug}}/{{webp480}} 480w, {{root}}assets/listings/{{slug}}/{{webp}} 960w" sizes="100vw">
         <img data-src="{{root}}assets/listings/{{slug}}/{{file}}" alt="{{room}}, {{address}}" width="{{w}}" height="{{h}}" loading="lazy">
       </picture>{{/if}}
-      <figcaption>{{room}}</figcaption>
+      <figcaption>{{room}}</figcaption>{{#if label}}<span class="ai-label">{{label}}</span>{{/if}}
     </figure>
     {{/each}}
     <button class="gal-btn prev" type="button" aria-label="Previous photo">‹</button>
@@ -77,6 +77,7 @@
           <source type="image/webp" srcset="{{root}}assets/listings/{{slug}}/{{webp480}} 480w, {{root}}assets/listings/{{slug}}/{{webp}} 960w" sizes="(max-width:900px) 100vw, 60vw">
           <img src="{{root}}assets/listings/{{slug}}/{{file}}" alt="{{room}}" width="{{w}}" height="{{h}}" loading="lazy">
         </picture>
+        {{#if label}}<span class="ai-label">{{label}}</span>{{/if}}
         <div class="room-cap"><span class="n">{{n}} / {{photoCount}}</span><h3>{{room}}</h3>{{#if sqft}}<span class="sf">{{sqft}} sq ft</span>{{/if}}<p>{{caption}}</p></div>
       </div>
     </section>

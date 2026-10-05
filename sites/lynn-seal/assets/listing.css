@@ -160,3 +160,24 @@
 a.comm:hover h3{color:var(--brass)}
 .comm .arrow{color:var(--brass);font-size:1rem}
 @media (prefers-reduced-motion:reduce){.gal .slide.active img{animation:none}.room-pin img,.room-cap{animation:none!important;transform:none!important;clip-path:none!important}.lead-bar{transition:none}}
+
+.ai-label{position:absolute;top:10px;left:10px;z-index:2;background:rgba(255,255,255,.92);color:#12213A;font:700 .66rem/1 var(--body);letter-spacing:.14em;text-transform:uppercase;padding:.4rem .6rem;border:1px solid #12213A}
+.room-pin{position:sticky}
+.room-pin .ai-label{top:1.6rem;left:calc(var(--gutter) + 10px)}
+
+/* ===== Design review layer (apple-design-review, 5 Oct 2026). Visual only. ===== */
+.gal-btn:active,.gal-open:active,.lb-close:active,.gal-dots button:active::before,.plan .hot:active{transform:translateY(-50%) scale(.94);transition:transform .1s ease-out}
+.gal-open:active,.lb-close:active,.plan .hot:active{transform:scale(.96)}
+.gal-dots button:active::before{transform:scale(.8)}
+.gal-btn,.gal-open,.lb-close{transition:transform .25s cubic-bezier(.2,.7,.2,1),background .15s;backdrop-filter:blur(6px) saturate(1.4);-webkit-backdrop-filter:blur(6px) saturate(1.4)}
+.gal .slide figcaption,.gal-open,.compare .lbl{letter-spacing:.14em}
+.lead-bar{background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);transition:transform .4s cubic-bezier(.2,.7,.2,1);box-shadow:0 -10px 30px -24px rgba(11,37,69,.5)}
+.gal-head h1{letter-spacing:-.02em}
+.room-cap h3{letter-spacing:-.015em;line-height:1.1}
+.compare .handle::after{transition:transform .15s cubic-bezier(.2,.7,.2,1)}
+.compare:active .handle::after{transform:translate(-50%,-50%) scale(.92)}
+.lightbox[open]{animation:lbin .22s ease-out both}
+@keyframes lbin{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-transparency:reduce){.lead-bar,.gal-btn,.gal-open,.lb-close{backdrop-filter:none;-webkit-backdrop-filter:none}.lead-bar{background:var(--bg)}}
+@media (prefers-contrast:more){.gal-btn,.gal-open,.lb-close{background:rgba(11,37,69,.9)}}
+@media (prefers-reduced-motion:reduce){.lightbox[open]{animation:none}.gal-btn:active,.gal-open:active{transform:translateY(-50%)}.gal-open:active{transform:none}}

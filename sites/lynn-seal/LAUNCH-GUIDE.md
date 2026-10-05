@@ -54,8 +54,17 @@ She has 40 transactions in one community. Nobody else can say that. Build on it:
 - A "Treviso Bay Golf vs. Social Membership" explainer with real dollar figures. Buyers search this constantly and every current answer online is a listing-portal fragment.
 - A quarterly Treviso Bay market report emailed to owners. Sellers list with the agent who has been mailing them data for a year.
 
-### 4. Add IDX search when the domain is live.
-Downing-Frye uses iHomefinder for its IDX. Ask the brokerage to issue Lynn an agent IDX embed so visitors can search live MLS listings on her own domain rather than bouncing to downingfrye.com. Until then, the "Current listings" section is hand-maintained.
+### 4. A live MLS feed is the one thing this site cannot get free.
+Listings today come from `data/listings.json`, which Lynn or Adam maintains (see `ADD-A-LISTING.md`). That covers her own listings well. If you want visitors to search every home for sale in Naples on her domain, that is an IDX feed, and every option costs money. Approximate monthly prices as of 2026; confirm with the vendor:
+
+| Option | What it is | Typical cost |
+| --- | --- | --- |
+| iHomefinder agent add-on through Downing-Frye | The brokerage already runs iHomefinder on downingfrye.com; agents can often get a sub-account or embed | about $30 to $60 per month, sometimes brokerage-paid; ask Downing-Frye marketing first |
+| IDX Broker | Embeddable search for any static site, NABOR-approved | about $60 to $90 per month plus a setup fee and the NABOR data fee |
+| Showcase IDX or Realtyna | WordPress-only plugins | about $60 to $100 per month |
+| Direct RESO Web API from the Naples MLS | Build it ourselves | NABOR data license fee plus development time; only worth it at scale |
+
+Recommendation: ask Downing-Frye for the iHomefinder agent embed first. Until an IDX is chosen, the site stays MLS-feed-free by design.
 
 ### 5. Michigan relocation funnel.
 Her origin story is a lead magnet. An 810 area code on every sign in Naples already tells Michiganders she is one of them.
@@ -74,6 +83,10 @@ Form submission → CRM lead → instant text ("Hi, it's Lynn. Got your note, I'
 - Claim and unify her profiles: Zillow, Realtor.com, Homes.com, Downing-Frye. Same headshot, same bio, same phone. Homes.com currently links to a dead website and a personal Facebook page.
 - Add a professional signature block and this URL to her email and her MLS remarks.
 - Set up Google Analytics 4 or Plausible on the domain before launch so the first campaign has a baseline.
+
+## Build and templates
+
+The site now has a build step (`node build.js`, no dependencies) that renders listing pages and the Treviso Bay guide from `data/*.json` and `templates/`. `ADD-A-LISTING.md` is the plain-English guide. The same templates run a second site by swapping `data/site.json`, `data/listings.json`, `data/neighborhoods.json`, the assets folder and the tokens file; nothing in `templates/` or `assets/site.js` is Lynn-specific except the footer text in `templates/partials/footer.html`.
 
 ## Design notes
 
