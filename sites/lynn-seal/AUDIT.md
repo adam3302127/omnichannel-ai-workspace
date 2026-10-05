@@ -43,4 +43,4 @@
 
 ## What this build changed
 
-See `CHANGELOG.md`. Short version: a design-system file every page shares, a data file that drives listing pages and the home page, four interactive listing pages, a Treviso Bay guide with schema, a seller valuation form, WebP images with responsive sizes, contrast and tap-target fixes, and a carousel. Lighthouse after: home 96 / 100 / 96 / 100, listing page 97 / 97 / 96 / 100 (mobile, simulated throttling, fonts blocked in the test sandbox).
+See `CHANGELOG.md`. Short version: a design-system file every page shares, a data file that drives listing pages and the home page, four interactive listing pages, a Treviso Bay guide with schema, a seller valuation form, WebP images with responsive sizes, contrast and tap-target fixes, and a carousel. Lighthouse after: home 96 / 100 / 96 / 100, listing page 98 / 97 / 96 / 100 (mobile, simulated throttling, fonts blocked in the test sandbox).

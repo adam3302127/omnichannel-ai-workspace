@@ -28,7 +28,8 @@
 | Page | Before | After |
 | --- | --- | --- |
 | Home | 96 / 96 / 96 / 100 | 96 / 100 / 96 / 100 |
-| Listing (9546 Firenze) | did not exist | 97 / 97 / 96 / 100 |
+| Listing (9546 Firenze) | did not exist | 98 / 97 / 96 / 100 |
+| Treviso Bay guide | did not exist | 97 / 100 / 96 / 100 |
 
 Order: performance / accessibility / best practices / SEO. Remaining performance notes are hosting-level: text compression and long cache headers come from the host, not the files.
 

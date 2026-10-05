@@ -30,7 +30,6 @@
     gal.querySelector('.gal-btn.next').addEventListener('click', function () { go(cur + 1, true); });
     gal.addEventListener('mouseenter', function () { if (timer) clearInterval(timer); });
     gal.addEventListener('mouseleave', restart);
-    gal.setAttribute('tabindex', '0');
     gal.addEventListener('keydown', function (e) { if (e.key === 'ArrowLeft') go(cur - 1, true); if (e.key === 'ArrowRight') go(cur + 1, true); if (e.key === 'Enter') openBox(cur); });
     var x0 = null;
     gal.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
