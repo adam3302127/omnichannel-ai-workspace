@@ -1,0 +1,16 @@
+/* Lynn Seal design tokens. Edit colors and type here; every page reads from these.
+   Light values on :root; dark values redefine the same tokens. */
+/* Layout: classic navy-and-white brochure. White ground, navy type and blocks, a thin brass rule
+   as the only ornament. Baskerville headings, Lato body. Photography does the talking. */
+:root{
+  --bg:#FFFFFF; --paper:#F3F5F9; --fg:#12213A; --muted:#5B6579; --rule:#D8DEE8;
+  --navy:#0B2545; --navy-2:#153563; --navy-ink:#FFFFFF; --brass:#B08D57; --brass-text:#86672F; --brass-soft:#EFE6D6; --block:#0B2545; --block-ink:#FFFFFF; --red:#B5121B;
+  --display:"Libre Baskerville", Baskerville, "Times New Roman", Georgia, serif;
+  --body:"Lato", "Helvetica Neue", Arial, sans-serif;
+  --script:"Great Vibes", "Brush Script MT", cursive;
+  --max:1120px; --gutter:clamp(16px,4vw,40px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-text:#D9B97E; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; --red:#E8646C; color-scheme:dark }
+}
+:root[data-theme="dark"]{ --bg:#0B1626; --paper:#111F35; --fg:#EEF1F6; --muted:#A3AEC2; --rule:#25344E; --navy:#E9EEF6; --navy-2:#C9D6EA; --navy-ink:#0B1626; --brass:#CFAE76; --brass-text:#D9B97E; --brass-soft:#2A2A22; --block:#122A4D; --block-ink:#FFFFFF; --red:#E8646C; color-scheme:dark }
