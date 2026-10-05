@@ -1,0 +1,37 @@
+{
+  "site": {
+    "name": "Lynn Seal, Naples Realtor",
+    "baseUrl": "https://lynnsealnaples.com",
+    "formEndpoint": "https://formsubmit.co/ajax/lynnsealnaples@gmail.com",
+    "leadLogEndpoint": "",
+    "leadLogNote": "Optional. Paste a Google Apps Script web-app URL (see tools/lead-logger.gs) and every lead is also appended to a Google Sheet as a CSV-style row. Leave empty to email only."
+  },
+  "agent": {
+    "name": "Lynn Seal",
+    "suffix": "PA",
+    "title": "REALTOR®",
+    "phone": "(810) 691-6829",
+    "phoneDisplay": "810-691-6829",
+    "phoneRaw": "+18106916829",
+    "email": "lynnsealnaples@gmail.com",
+    "emailDisplay": "LynnSealNaples@gmail.com",
+    "brokerage": "Downing-Frye Realty, Inc.",
+    "office": "8950 Fontana Del Sol Way, Suite 100, Naples, FL 34109",
+    "officePhone": "(239) 261-2244",
+    "thumb": "assets/lynn-seal-thumb.jpg",
+    "wordmark": "assets/lynn-seal-wordmark.png",
+    "dfLogo": "assets/df-logo.png",
+    "badges": ["Downing-Frye Top Producer", "Treviso Bay's Top-Selling Agent"],
+    "profiles": {
+      "realtor": "https://www.realtor.com/realestateagents/5c896890c4ea0f0012d2097f",
+      "zillow": "https://www.zillow.com/profile/Lynn%20Seal",
+      "homes": "https://www.homes.com/real-estate-agents/lynn-seal/v5kl44f/",
+      "downingfrye": "https://www.downingfrye.com/agents/lynn-seal/"
+    }
+  },
+  "commuteTargets": [
+    {"name": "Naples Pier and beach", "lat": 26.1305, "lng": -81.8077},
+    {"name": "Fifth Avenue South", "lat": 26.1419, "lng": -81.7962},
+    {"name": "RSW airport", "lat": 26.5362, "lng": -81.7552}
+  ]
+}

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lynnsealnaples.com/sitemap.xml

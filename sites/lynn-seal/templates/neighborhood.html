@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+{{> head}}
+<link rel="stylesheet" href="{{root}}assets/listing.css">
+<script type="application/ld+json">{{{jsonld}}}</script>
+</head>
+<body>
+{{> nav}}
+<main id="top" class="guide">
+
+<section class="band guide-hero">
+  <div class="wrap">
+    <p class="eyebrow">Neighborhood guide · {{where}}</p>
+    <h1>{{name}}</h1>
+    <p>{{tagline}}</p>
+    <div class="row">{{#each stats}}<div><b class="num">{{v}}</b><span>{{l}}</span></div>{{/each}}</div>
+  </div>
+</section>
+
+<section class="overview">
+  <div class="wrap grid">
+    <div class="prose">
+      <p class="eyebrow">About {{name}}</p>
+      {{#each intro}}<p>{{this}}</p>{{/each}}
+      <h2 style="margin-top:.6rem">Neighborhoods inside {{name}}</h2>
+      <div class="sub-grid">{{#each sub}}<div class="subn"><b>{{n}}</b><span>{{t}}</span><p>{{d}}</p></div>{{/each}}</div>
+    </div>
+    <aside class="sheet">
+      {{#each facts}}<div class="fact"><span class="k">{{k}}</span><span>{{v}}</span></div>{{/each}}
+    </aside>
+  </div>
+</section>
+
+<section class="listings">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">In {{name}} now</p><h2>Lynn's listings and recent sales here</h2></div>
+    <div class="flyers">{{{flyers}}}</div>
+  </div>
+</section>
+
+<section class="faq-wrap">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Questions buyers ask</p><h2>{{name}} FAQ</h2></div>
+    <div class="faq">{{#each faq}}<details{{#if first}} open{{/if}}><summary>{{q}}</summary><p>{{a}}</p></details>{{/each}}</div>
+  </div>
+</section>
+
+<section class="ask" id="ask">
+  <div class="wrap grid">
+    <div class="side">
+      <p class="eyebrow">Talk to Lynn about {{name}}</p>
+      <h2>Buying, selling, or weighing a membership?</h2>
+      <p class="lede">Lynn will send current inventory, the fee schedule for any address, and an honest read on value.</p>
+      <div class="agent-card">
+        <img src="{{root}}assets/lynn-seal-thumb.jpg" alt="" width="64" height="64">
+        <div><b>Lynn Seal, PA</b><span>{{agent.brokerage}}</span><a href="tel:{{agent.phoneRaw}}">{{agent.phone}}</a></div>
+      </div>
+    </div>
+    {{{leadForm}}}
+  </div>
+</section>
+
+</main>
+{{> footer}}
+<script src="{{root}}assets/site.js" defer></script>
+</body>
+</html>
