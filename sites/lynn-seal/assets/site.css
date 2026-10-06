@@ -208,7 +208,7 @@ section{padding-block:clamp(52px,7vw,96px)}
 .direct .v a{text-decoration:none;color:var(--navy)}
 .copybtn{border:1px solid var(--rule);background:var(--bg);padding:.2rem .55rem;font-size:.74rem;font-weight:700;cursor:pointer;color:var(--navy);font-family:var(--body);letter-spacing:.06em;text-transform:uppercase}
 .beach{margin-top:.4rem}
-.beach img{width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid var(--rule)}
+.beach img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:center 60%;border:1px solid var(--rule)}
 form{display:grid;gap:1rem;padding:clamp(18px,3vw,32px);background:var(--bg);border:1px solid var(--rule)}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 label{display:grid;gap:.35rem;font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
