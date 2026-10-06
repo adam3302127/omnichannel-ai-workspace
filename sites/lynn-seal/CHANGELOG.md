@@ -54,3 +54,4 @@ Order: performance / accessibility / best practices / SEO. Remaining performance
 - "Back to all listings" bar under the nav on every listing page, and "Back to home" on the neighborhood guide.
 - Removed stale low-resolution duplicates from assets/listings.
 - Contact-section beach photo restored to the original view (Marc Ryckaert, Naples Beach3), now at 1600 px.
+- "Your Home?" card pier photo restored to the original view (800 px, the prior file); Commons credits restored to the original three photographers.
