@@ -38,3 +38,7 @@ Order: performance / accessibility / best practices / SEO. Remaining performance
 - No new hosting, domain or DNS changes.
 - No AI-enhanced or virtually staged images. None were used, so no labels were needed; the template carries a `label` field on photos for when one is.
 - The Facebook reel still plays through Facebook's player until `assets/lynn-reel.mp4` is dropped in.
+
+## 2026-10-06 — v9
+- Fixed the home page cards: an earlier build had written broken duplicate card fragments after each generated block, leaving unstyled text under the listings, sold and communities grids. Cleaned the source and changed the build script to splice between the first opening and last closing marker so it cannot happen again.
+- Fresh home-page screenshots (phone and desktop), plus close-ups of the listings and sold sections.

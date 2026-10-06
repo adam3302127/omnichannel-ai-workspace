@@ -114,9 +114,11 @@ for (const n of hoods.filter(x => x.page)) {
 // home page generated blocks
 let home = read('index.html');
 function inject(name, html) {
-  const re = new RegExp(`(<!-- build:${name} -->)[\\s\\S]*?(<!-- /build:${name} -->)`);
-  if (!re.test(home)) throw new Error('marker missing: ' + name);
-  home = home.replace(re, function (_, a, z) { return a + '\n' + html + '\n' + z; });
+  const open = `<!-- build:${name} -->`, close = `<!-- /build:${name} -->`;
+  const i = home.indexOf(open), j = home.lastIndexOf(close);
+  if (i < 0 || j < 0) throw new Error('marker missing: ' + name);
+  // slice, never String.replace: generated HTML contains "$2,250,000"-style prices that replace() would read as $n groups
+  home = home.slice(0, i + open.length) + '\n' + html + '\n' + home.slice(j);
 }
 inject('listings', listings.filter(l => l.page && l.featured).map(l => flyerHtml(l, '')).join('\n'));
 inject('sold', listings.filter(l => l.status === 'sold').map(l => flyerHtml(l, '')).join('\n'));
