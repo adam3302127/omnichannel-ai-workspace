@@ -71,8 +71,18 @@
       var open = document.createElement('a'); open.href = poster.href; open.target = '_blank'; open.rel = 'noopener'; open.textContent = 'Open on Facebook'; open.className = 'video-open'; vw.appendChild(open);
     }
     var preview = location.protocol === 'file:' || /claude|localhost|127\.0\.0\.1/.test(location.hostname);
-    reel.addEventListener('loadeddata', function () { reel.hidden = false; vw.classList.add('playing'); reel.play().catch(function () {}); });
-    reel.addEventListener('error', function () { reel.remove(); if (!preview) embed(); }, true);
+    var sound = document.getElementById('sound');
+    function show() { reel.hidden = false; vw.classList.add('playing'); if (sound) sound.hidden = false; reel.play().catch(function () {}); }
+    reel.addEventListener('loadeddata', show);
+    if (reel.readyState >= 2) show(); /* already loaded before this script ran */
+    if (sound) sound.addEventListener('click', function () {
+      reel.muted = !reel.muted; var on = !reel.muted;
+      sound.setAttribute('aria-pressed', on ? 'true' : 'false'); sound.setAttribute('aria-label', on ? 'Turn sound off' : 'Turn sound on'); sound.textContent = on ? 'Sound on' : 'Sound off';
+      if (on) reel.play().catch(function () {});
+    });
+    function fail() { reel.remove(); if (sound) sound.remove(); if (!preview) embed(); }
+    reel.addEventListener('error', function () { if (reel.error) fail(); });
+    var srcs = reel.querySelectorAll('source'); if (srcs.length) srcs[srcs.length - 1].addEventListener('error', fail); /* last source failed: nothing playable */
     poster.addEventListener('click', function (e) { if (reel.parentNode && reel.readyState > 0) return; e.preventDefault(); embed(); });
   }
 })();

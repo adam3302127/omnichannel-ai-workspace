@@ -10,7 +10,7 @@ Photos currently in this folder were captured at web resolution from Lynn's publ
 | `df-logo.png` | Downing-Frye "df" mark cut from the card | 600 px wide |
 | `hero-card-wide.jpg` | Desktop header band generated from the card photo: whole photo at right, blurred palm bokeh extension, white panel at left. Regenerate if the photo is replaced. | 1920 x 620 px |
 | `lynn-seal-thumb.jpg` | Small round portrait in the flyer footers | 320 x 320 px |
-| `lynn-reel.mp4` | Lynn's Facebook reel, self-hosted so it autoplays muted in the About section. Download it from Facebook (open the reel, three-dot menu, Download) and drop it here. Until this file exists the block shows a poster that opens the reel on Facebook. | 1080 x 1920, under 15 MB, H.264 |
+| `lynn-reel.mp4` | Lynn's Facebook reel, self-hosted so it autoplays muted in the About section with a sound toggle. In place (720 x 1280 H.264, 2.3 MB). To replace it, drop in a new H.264 MP4 under the same name and update `lynn-reel-poster.jpg` with a frame from it. | 720 x 1280, under 5 MB, H.264 |
 | `og-cover.jpg` | Link preview when the site is shared by text or on social | 1200 x 630 px |
 | `listings/9529-avellino-way-2815.jpg` | 9529 Avellino Way #2815 | 1600 x 1200 px |
 | `listings/9546-firenze-cir.jpg` | 9546 Firenze Cir | 1600 x 1200 px |

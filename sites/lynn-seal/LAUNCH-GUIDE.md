@@ -20,10 +20,9 @@
 
 ## The video block
 
-Adam asked for the Facebook reel (facebook.com/reel/1190972569679629) to run on the site. Facebook is blocked from the build environment, so I could not view it. The About section has a vertical video slot that works two ways:
+Lynn's Facebook reel (facebook.com/reel/1190972569679629) is self-hosted at `assets/lynn-reel.mp4` (720 x 1280, H.264 + AAC, 2.3 MB, 41 seconds). It autoplays muted and loops in the About section, with a Sound on/off button in the corner of the player and the first frame as the poster (`assets/lynn-reel-poster.jpg`). If the file ever goes missing, the live site falls back to Facebook's embedded player for the same permalink.
 
-1. **Best: self-host the MP4.** Download the reel from Facebook and save it as `assets/lynn-reel.mp4`. It will autoplay muted and loop, the way a reel does, with no Facebook branding and no dependency on their player.
-2. **Fallback: Facebook embed.** Until the MP4 exists, the live site loads Facebook's embedded player for the reel permalink Adam supplied (facebook.com/reel/1190972569679629), muted with autoplay. In the Claude preview and on local files, the slot shows a poster instead and tapping it loads the player; that frame blocks third-party players, so it will not play there.
+To swap in a newer reel: download it from Facebook (open the reel, three-dot menu, Download), convert it to H.264 MP4 at 720 x 1280 if it is not already, and replace `assets/lynn-reel.mp4`. Replace the poster JPEG with a frame from the new video and run `python3 tools/images.py`.
 
 ## Verify with Lynn before publishing
 

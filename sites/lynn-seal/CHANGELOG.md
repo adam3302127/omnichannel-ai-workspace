@@ -42,3 +42,7 @@ Order: performance / accessibility / best practices / SEO. Remaining performance
 ## 2026-10-06 — v9
 - Fixed the home page cards: an earlier build had written broken duplicate card fragments after each generated block, leaving unstyled text under the listings, sold and communities grids. Cleaned the source and changed the build script to splice between the first opening and last closing marker so it cannot happen again.
 - Fresh home-page screenshots (phone and desktop), plus close-ups of the listings and sold sections.
+
+## 2026-10-06 — v10
+- Lynn's Facebook reel is now self-hosted (`assets/lynn-reel.mp4`, 720x1280 H.264, 2.3 MB) so it plays in the preview and on any host without Facebook's player. Autoplays muted and loops, with a Sound on/off button and the reel's first frame as the poster. Facebook embed remains the fallback.
+- Found and fixed: the home page was still running an old inline copy of the page script instead of the shared `assets/site.js`, so the carousel arrows and the valuation form were not wired up. The home page now loads the shared script like every other page. Verified menu, carousel, both forms and the reel in a headless phone browser.

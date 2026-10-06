@@ -78,10 +78,11 @@
   <div class="wrap grid reveal">
     <div>
       <div class="video" id="video">
-        <video id="reel" muted loop playsinline autoplay preload="metadata" poster="assets/naples-pier-sunset.jpg" hidden><source src="assets/lynn-reel.mp4" type="video/mp4"></video>
-        <a class="poster" id="poster" href="https://www.facebook.com/reel/1190972569679629" target="_blank" rel="noopener"><span><i class="play"></i><b>Watch Lynn's latest reel</b><small>Tap to play · Facebook</small></span></a>
+        <video id="reel" muted loop playsinline autoplay preload="metadata" poster="assets/lynn-reel-poster.jpg" hidden><source src="assets/lynn-reel.mp4" type="video/mp4"><source src="assets/lynn-reel.webm" type="video/webm"></video>
+        <button type="button" class="sound" id="sound" aria-pressed="false" aria-label="Turn sound on" hidden>Sound off</button>
+        <a class="poster" id="poster" href="https://www.facebook.com/reel/1190972569679629" target="_blank" rel="noopener"><span><i class="play"></i><b>Watch Lynn's latest reel</b><small>Tap to play</small></span></a>
       </div>
-      <p class="video-cap">Lynn's latest reel from Treviso Bay.</p>
+      <p class="video-cap">Lynn's latest reel: a client testimonial from Laurie Powell.</p>
     </div>
     <div class="prose">
       <p class="eyebrow">About Lynn</p>
@@ -403,66 +404,6 @@
   <a class="btn ghost" href="#contact">Message</a>
 </div>
 
-<script>
-(function(){
-  var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
-  var els=document.querySelectorAll('.reveal');
-  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});els.forEach(function(el){io.observe(el);});}else{els.forEach(function(el){el.classList.add('in');});}
-  var reel=document.getElementById('reel'), vw=document.getElementById('video'), poster=document.getElementById('poster');
-  if(reel&&vw){
-    reel.addEventListener('loadeddata',function(){reel.hidden=false;vw.classList.add('playing');reel.play().catch(function(){});});
-    reel.addEventListener('error',function(){reel.remove();},true);
-    function embed(){
-      if(vw.querySelector('iframe'))return;
-      var f=document.createElement('iframe');f.title='Lynn Seal on Facebook';f.allow='autoplay; encrypted-media; picture-in-picture; web-share';f.allowFullscreen=true;
-      f.src='https://www.facebook.com/plugins/video.php?href='+encodeURIComponent(poster.href)+'&show_text=false&autoplay=true&mute=true';
-      vw.appendChild(f);vw.classList.add('playing');
-      var open=document.createElement('a');open.href=poster.href;open.target='_blank';open.rel='noopener';open.textContent='Open on Facebook';open.style.cssText='position:absolute;left:0;right:0;bottom:0;padding:.5rem;text-align:center;font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(11,37,69,.85);text-decoration:none';vw.appendChild(open);
-    }
-    var preview=location.protocol==='file:'||/claude|localhost/.test(location.hostname);
-    reel.addEventListener('error',function(){if(!preview)embed();},true);
-    poster.addEventListener('click',function(e){
-      if(reel.parentNode&&reel.readyState>0){return;}
-      e.preventDefault();
-      embed();
-    });
-  }
-  var btn=document.getElementById('menuBtn'), menu=document.getElementById('menu');
-  if(btn&&menu){
-    btn.addEventListener('click',function(){var o=menu.classList.toggle('open');btn.setAttribute('aria-expanded',o?'true':'false');});
-    menu.addEventListener('click',function(e){if(e.target.tagName==='A'){menu.classList.remove('open');btn.setAttribute('aria-expanded','false');}});
-  }
-  document.querySelectorAll('.copybtn').forEach(function(b){
-    b.addEventListener('click',function(){
-      var t=b.getAttribute('data-copy'), done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1600);};
-      function fallback(){var el=b.previousElementSibling;if(el){var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);}done();}
-      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fallback);}else{fallback();}
-    });
-  });
-  var form=document.getElementById('contactForm'), status=document.getElementById('formStatus'), submit=document.getElementById('submitBtn');
-  if(!form) return;
-  function show(html){status.innerHTML=html;status.hidden=false;status.scrollIntoView({block:'nearest',behavior:'smooth'});}
-  form.addEventListener('submit',function(e){
-    e.preventDefault();
-    var req=['fFirst','fLast','fEmail','fMsg'].map(function(id){return document.getElementById(id);});
-    var bad=req.filter(function(el){return !el.value.trim()||(el.type==='email'&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value));});
-    if(bad.length){bad[0].focus();show('<b>Please add your name, a valid email, and a short message.</b>');return;}
-    if(form.querySelector('.honey').value){return;}
-    var data=new FormData(form), payload={};data.forEach(function(v,k){if(k!=='_honey')payload[k]=v;});
-    var s={name:payload.first_name+' '+payload.last_name,email:payload.email,phone:payload.phone||'',interest:payload.interest,timeframe:payload.timeframe,message:payload.message};
-    submit.disabled=true;submit.textContent='Sending…';
-    var controller=('AbortController' in window)?new AbortController():null, timer=controller?setTimeout(function(){controller.abort();},9000):null;
-    fetch('https://formsubmit.co/ajax/lynnsealnaples@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload),signal:controller?controller.signal:undefined})
-      .then(function(r){if(!r.ok)throw new Error('http '+r.status);return r.json();})
-      .then(function(){if(timer)clearTimeout(timer);show('<b>Sent. Lynn has your message.</b><span>She replies personally, usually the same day. Urgent? Call or text (810) 691-6829.</span>');form.reset();submit.disabled=false;submit.textContent='Send to Lynn';})
-      .catch(function(){
-        if(timer)clearTimeout(timer);
-        var body=encodeURIComponent('Name: '+s.name+'\nEmail: '+s.email+'\nPhone: '+s.phone+'\nInterested in: '+s.interest+'\nTimeframe: '+s.timeframe+'\n\n'+s.message);
-        show('<b>The form could not reach the mail service from here.</b><span>Send the same note directly: <a href="mailto:lynnsealnaples@gmail.com?subject='+encodeURIComponent('Inquiry from lynnsealnaples.com')+'&body='+body+'">open in your email app</a>, or copy <b>lynnsealnaples@gmail.com</b>. You can also call or text (810) 691-6829.</span>');
-        submit.disabled=false;submit.textContent='Send to Lynn';
-      });
-  });
-})();
-</script>
+<script src="assets/site.js" defer></script>
 </body>
 </html>
