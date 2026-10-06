@@ -1,6 +1,6 @@
 # Photo drop-in guide
 
-Photos currently in this folder were captured at web resolution from Lynn's public agent profiles (Downing-Frye, Homes.com) and from Wikimedia Commons (Naples pier and beach, CC BY-SA, credited in the site footer). Replace the portraits and listing photos with full-resolution originals before launch, keeping these exact filenames:
+Listing photos are the full-size MLS images as published on Zillow, Redfin and downingfrye.com (1024 px wide, the largest the portals serve). Naples pier and beach photos are 1600 px originals from Wikimedia Commons (CC BY-SA, credited in the site footer). Lynn's portraits are still web resolution from her public profiles. Replace the portraits and listing photos with full-resolution originals before launch, keeping these exact filenames:
 
 | File | Used for | Recommended size |
 | --- | --- | --- |

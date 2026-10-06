@@ -46,3 +46,10 @@ Order: performance / accessibility / best practices / SEO. Remaining performance
 ## 2026-10-06 — v10
 - Lynn's Facebook reel is now self-hosted (`assets/lynn-reel.mp4`, 720x1280 H.264, 2.3 MB) so it plays in the preview and on any host without Facebook's player. Autoplays muted and loops, with a Sound on/off button and the reel's first frame as the poster. Facebook embed remains the fallback.
 - Found and fixed: the home page was still running an old inline copy of the page script instead of the shared `assets/site.js`, so the carousel arrows and the valuation form were not wired up. The home page now loads the shared script like every other page. Verified menu, carousel, both forms and the reel in a headless phone browser.
+
+## 2026-10-06 — v11
+- Every listing photo replaced with the full-size MLS image (1024 px wide, up from 253 to 516 px). The three active Treviso Bay listings now carry 11 photos each in walk order with fresh captions; the Glades rental has 7. Sold flyers use the full-size exterior. 9446 Piacere Way had been showing the community entrance instead of the house; it now shows the house.
+- Naples pier and beach photos replaced with 1600 px originals from Wikimedia Commons; footer credits updated to match the files in use.
+- Video slot removed from the listing-page walkthrough; the photo slideshow stands on its own.
+- "Back to all listings" bar under the nav on every listing page, and "Back to home" on the neighborhood guide.
+- Removed stale low-resolution duplicates from assets/listings.

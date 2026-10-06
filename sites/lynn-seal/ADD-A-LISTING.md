@@ -35,7 +35,6 @@ Copy an existing entry (9529 Avellino Way is a good model) and change the fields
 | `photos` | One entry per photo, in walk order: `{"file":"01.jpg","room":"Great room","sqft":"","caption":"One line about the room."}`. `sqft` is optional. |
 | `compare` | `null`, or `{"before":"01.jpg","after":"02.jpg","beforeLabel":"Day","afterLabel":"Twilight"}`. |
 | `floorplan` | `null`, or `{"file":"plan.jpg","hotspots":[{"x":30,"y":40,"room":"Kitchen","label":"Kitchen"}]}` where x and y are percentages across the plan image. |
-| `video` | `""`, or the embed URL of a YouTube, Vimeo or Matterport tour. It fills the video slot at the end of the walkthrough. |
 | `featured` | `true` to show in the home-page carousel. |
 | `nearbyFallback` | Two or three nearby things to list if the live map lookup is slow. |
 

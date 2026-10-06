@@ -276,3 +276,8 @@ h3{letter-spacing:-.005em}
 /* Accessibility: contrast preference, focus, reduced motion */
 @media (prefers-contrast:more){:root{--rule:#8A94A6;--muted:#3E4756}.badge,.flyer,.card,.review,.sheet,.comm{border-width:2px}}
 @media (prefers-reduced-motion:reduce){.btn:active,.car-btn:active,.flyer:active{transform:none}.nav ul.open{animation:none}.flyer:hover{transform:none}}
+
+.crumb{background:var(--bg);border-bottom:1px solid var(--rule)}
+.crumb .wrap{padding-block:.1rem}
+.crumb .back{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);text-decoration:none;padding:.35rem .2rem;min-height:44px}
+.crumb .back:hover{color:var(--red)}

@@ -70,11 +70,6 @@
   .room-pin{grid-template-columns:1fr;align-content:start;gap:.9rem;padding-top:1rem}
   .room-pin picture,.room-pin img{height:min(46vh,380px)}
 }
-.video-slot{margin:clamp(28px,4vw,56px) 0 clamp(52px,7vw,96px)}
-.video-frame{aspect-ratio:16/9;background:#000;border:1px solid var(--rule)}
-.video-frame iframe{width:100%;height:100%;border:0;display:block}
-.video-empty{border:1px dashed var(--brass);padding:1.3rem 1.4rem;display:grid;gap:.4rem;background:var(--paper)}
-.video-empty p{font-size:.95rem;color:var(--muted);max-width:60ch}
 
 /* before / after */
 .compare-wrap{background:var(--paper)}

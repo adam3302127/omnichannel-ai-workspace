@@ -7,6 +7,7 @@
 </head>
 <body>
 {{> nav}}
+<div class="crumb"><div class="wrap"><a class="back" href="{{root}}#listings">&larr; Back to all listings</a></div></div>
 <main id="top" class="listing" data-lat="{{lat}}" data-lng="{{lng}}" data-address="{{address}}, {{city}}, {{state}} {{zip}}">
 
 <section class="gal-wrap">
@@ -82,15 +83,6 @@
       </div>
     </section>
     {{/each}}
-  </div>
-  <div class="wrap">
-    <div class="video-slot" id="video-slot" data-video="{{video}}">
-      {{#if video}}
-      <div class="video-frame"><iframe src="{{video}}" title="Video tour of {{address}}" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
-      {{else}}
-      <div class="video-empty"><span class="eyebrow">Video tour</span><p>A video walkthrough of this home will appear here. Lynn adds it by pasting the video link into this listing's record.</p></div>
-      {{/if}}
-    </div>
   </div>
 </section>
 
