@@ -56,3 +56,6 @@ Order: performance / accessibility / best practices / SEO. Remaining performance
 - Contact-section beach photo restored to the original view (Marc Ryckaert, Naples Beach3), now at 1600 px.
 - "Your Home?" card pier photo restored to the original view (800 px, the prior file); Commons credits restored to the original three photographers.
 - Contact-section photo is now downtown Naples at dusk from Naples Bay (Charles Patrick Ewing, CC BY 2.0, Wikimedia Commons), 1600 px, replacing the beach photo at Adam's request.
+
+## 2026-10-07 — v15
+- GitHub Pages deploy workflow for lynnsealnaples.com, plus a go-live section in LAUNCH-GUIDE.md with the DNS records.

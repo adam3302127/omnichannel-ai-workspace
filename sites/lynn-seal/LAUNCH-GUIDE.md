@@ -24,6 +24,28 @@ Lynn's Facebook reel (facebook.com/reel/1190972569679629) is self-hosted at `ass
 
 To swap in a newer reel: download it from Facebook (open the reel, three-dot menu, Download), convert it to H.264 MP4 at 720 x 1280 if it is not already, and replace `assets/lynn-reel.mp4`. Replace the poster JPEG with a frame from the new video and run `python3 tools/images.py`.
 
+## Going live (GitHub Pages + lynnsealnaples.com)
+
+The site deploys from this repository with the workflow at `.github/workflows/lynn-seal-pages.yml`. Every push to `main` that touches `sites/lynn-seal/` rebuilds the pages and publishes them to GitHub Pages. Hosting is free.
+
+**One-time setup**
+
+1. Merge this branch into `main`. The workflow runs and enables GitHub Pages on its first run. If it fails on "enablement", open the repo's Settings, then Pages, set Source to "GitHub Actions", and re-run the workflow from the Actions tab.
+2. In Settings, then Pages, type `lynnsealnaples.com` in Custom domain and save. Tick "Enforce HTTPS" once the certificate shows as issued (usually within an hour of DNS resolving).
+3. At the domain registrar, add these DNS records:
+
+| Type | Name | Value |
+| --- | --- | --- |
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | adam3302127.github.io |
+
+4. After the first visitor submits the contact form, FormSubmit emails lynnsealnaples@gmail.com an activation link. Lynn clicks it once and every later message arrives normally. Send a test message right after launch so she gets that email while you are both watching.
+
+**Updating the live site** is a push to `main`. Lynn's additions follow ADD-A-LISTING.md; the workflow rebuilds and publishes within about two minutes.
+
 ## Verify with Lynn before publishing
 
 - **Top Producer wording.** The site says "Downing-Frye Top Producer" in the hero badge, About list, and footer. Confirm the exact award tier with Lynn (Downing-Frye recognizes Platinum, Gold, and Silver production levels). If she is Platinum, change the badge to "Downing-Frye Platinum Top Producer" in `index.html` (three occurrences).
