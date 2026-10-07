@@ -156,8 +156,15 @@ section{padding-block:clamp(52px,7vw,96px)}
 .review .who{font-size:.85rem;color:var(--muted)}
 .band .eyebrow{color:#D8BE8E}
 .review .who b{display:block;color:var(--fg)}
-.review-cta{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;margin-top:1.6rem;font-size:.9rem;color:var(--muted)}
-.review-cta a{color:var(--navy);font-weight:700}
+.review-cta{display:grid;grid-template-columns:1.2fr 1fr;gap:1.4rem;align-items:center;margin-top:1.6rem;padding:1.6rem 1.8rem;background:var(--bg);border:1px solid var(--rule);border-top:4px solid var(--brass)}
+.review-cta-text .eyebrow{margin-bottom:.3rem}
+.review-cta-text h3{font-family:var(--display);font-weight:400;font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--navy);margin:0 0 .4rem}
+.review-cta-text p:last-child{margin:0;color:var(--muted);font-size:.95rem}
+.review-cta-btns{display:grid;gap:.7rem;justify-items:stretch}
+.review-cta-btns .btn{width:100%;padding:1rem 1.2rem;font-size:.95rem}
+.review-cta-btns .star{color:var(--brass);font-size:1.1em;line-height:1}
+.review-cta-btns .btn.primary .star{color:#E9CB8C}
+@media (max-width:760px){.review-cta{grid-template-columns:1fr;padding:1.3rem 1.2rem}}
 @media (max-width:900px){.reviews{grid-template-columns:1fr}}
 
 /* brokerage strip */
